@@ -14,11 +14,11 @@ def get_args(argv: list) -> tuple:
     try:
         opts, _ = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
     except getopt.GetoptError:
-        print('Command line argument syntax error.\nCorrect command format is:\n\tpython interpreter.py -i <inputfile> -o <outputfile>')
+        print('Command line argument syntax error.\nCorrect command format is:\n\tpython3 interpreter.py -i <inputfile> -o <outputfile>')
         sys.exit(CLI_ERROR_CODE)
     for opt, arg in opts:
         if opt == '-h':
-            print('python interpreter.py -i <inputfile> -o <outputfile>')
+            print('python3 interpreter.py -i <inputfile> -o <outputfile>')
             sys.exit()
         elif opt in ("-i", "--ifile"):
             input_file = arg
@@ -222,7 +222,7 @@ if __name__ == "__main__":
     try:
         input_file, output_file = get_args(sys.argv[1:])
         if input_file == '' or output_file == '':
-            raise Exception("Missing argument(s).\nCorrect command format is:\n\tpython interpreter.py -i <inputfile> -o <outputfile>")
+            raise Exception("Missing argument(s).\nCorrect command format is:\n\tpython3 interpreter.py -i <inputfile> -o <outputfile>")
         else:
             instr, labels = get_instructions(input_file)
             bin_intr = get_binary(instr, labels)
