@@ -19,16 +19,22 @@ module simd_processor
 			memtoregE, memtoregM, memtoregW,
 			regwriteE, regwriteM, regwriteW;
 	logic [2:0] alucontrolE;
-	logic flushE, equalD;
+	logic flushE;
+	logic jumpD; 
+	logic [1:0] branchD;
+	logic [31:0] srca2D, srcb2D;
 	
 	control c
 	(
 		clk, reset, opD, functD, flushE,
-		equalD,memtoregE, memtoregM,
-		memtoregW, memwriteM, pcsrcD,
-		branchD,alusrcE, regdstE, regwriteE,
+		memtoregE, memtoregM,
+		memtoregW, memwriteM, 
+		pcsrcD, alusrcE, 
+		branchD, 
+		regdstE, regwriteE,
 		regwriteM, regwriteW, jumpD,
-		alucontrolE
+		alucontrolE,
+		srca2D, srcb2D
 	);
 	
 	datapath dp
@@ -38,9 +44,10 @@ module simd_processor
 		alusrcE, regdstE, regwriteE,
 		regwriteM, regwriteW, jumpD,
 		alucontrolE,
-		equalD, pcF, instrF,
+		pcF, instrF,
 		aluoutM, writedataM, readdataM,
-		opD, functD, flushE
+		opD, functD, flushE,
+		srca2D, srcb2D
 	);
 
 endmodule

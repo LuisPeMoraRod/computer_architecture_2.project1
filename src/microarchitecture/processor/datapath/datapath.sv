@@ -4,34 +4,36 @@ module datapath
 (
 	input logic clk, reset,
 	input logic memtoregE, memtoregM, memtoregW,
-	input logic pcsrcD, branchD,
+	input logic pcsrcD, 
+	input logic [1:0] branchD,
 	input logic alusrcE, regdstE,
 	input logic regwriteE, regwriteM, regwriteW,
 	input logic jumpD,
 	input logic [2:0] alucontrolE,
-	output logic equalD,
 	output logic [31:0] pcF,
 	input logic [31:0] instrF,
 	output logic [31:0] aluoutM,writedataM,
 	input logic [31:0] readdataM,
 	output logic [5:0] opD, functD,
-	output logic flushE
+	output logic flushE,
+	output logic [31:0] srca2D, srcb2D
 );
 
 
 	logic forwardaD, forwardbD;
 	logic [1:0] forwardaE, forwardbE;
-	logic stallF;
+	logic stallF, stallD;
 	logic [4:0] rsD, rtD, rdD, rsE, rtE, rdE;
 	logic [4:0] writeregE, writeregM, writeregW;
 	logic flushD;
 	logic [31:0] pcnextFD, pcnextbrFD, pcplus4F, pcbranchD;
 	logic [31:0] signimmD, signimmE, signimmshD;
-	logic [31:0] srcaD, srca2D, srcaE, srca2E;
-	logic [31:0] srcbD, srcb2D, srcbE, srcb2E, srcb3E;
+	logic [31:0] srcaD, srcaE, srca2E;
+	logic [31:0] srcbD, srcbE, srcb2E, srcb3E;
 	logic [31:0] pcplus4D, instrD;
 	logic [31:0] aluoutE, aluoutW;
 	logic [31:0] readdataW, resultW;
+	logic [3:0] flags;
 	
 	
 	// hazard detection
@@ -70,14 +72,12 @@ module datapath
 	mux2 #(32) forwardadmux(srcaD, aluoutM, forwardaD, srca2D);
 	mux2 #(32) forwardbdmux(srcbD, aluoutM, forwardbD, srcb2D);
 	
-	assign equalD = (srca2D == srcb2D) ? 1'b1 : 1'b0;
-	
 	assign opD = instrD[31:26];
 	assign functD = instrD[5:0];
 	assign rsD = instrD[25:21];
 	assign rtD = instrD[20:16];
 	assign rdD = instrD[15:11];
-	assign flushD = pcsrcD | jumpD;
+	assign flushD = (pcsrcD | jumpD) & ~stallD;
 	
 	
 	// Execute stage
@@ -92,7 +92,7 @@ module datapath
 	mux3 #(32) forwardbemux (srcbE, resultW, aluoutM, forwardbE, srcb2E);
 	mux2 #(32) srcbmux (srcb2E, signimmE, alusrcE, srcb3E);
 	
-	ALU alu(srca2E, srcb3E, alucontrolE, aluoutE);
+	ALU alu(srca2E, srcb3E, alucontrolE, aluoutE, flags);
 	mux2 #(5) wrmux (rtE, rdE, regdstE, writeregE);
 	
 	

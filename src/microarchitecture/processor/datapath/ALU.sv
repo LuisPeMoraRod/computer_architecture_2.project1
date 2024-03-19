@@ -10,9 +10,9 @@ module ALU #(parameter N = 32)
 	logic neg, zero, _carry, overflow;
 	logic [N-1:0] condinvb;
 	logic [N:0] sum;
-	logic [5:0] shamt; 
+	//logic [5:0] shamt; 
 	
-	assign shamt = b[10:6];
+	//assign shamt = b[10:6];
 	
 	assign condinvb = alucontrol[2] ? ~b : b;
 	assign sum = a + condinvb + alucontrol[2];	
