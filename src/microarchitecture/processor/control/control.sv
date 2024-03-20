@@ -4,14 +4,16 @@ module control
 (
 	input logic clk, reset,
 	input logic [5:0] opD, functD,
-	input logic flushE, equalD,
+	input logic flushE,
 	output logic memtoregE, memtoregM,
 	output logic memtoregW, memwriteM,
-	output logic pcsrcD, branchD, alusrcE,
+	output logic pcsrcD, alusrcE,
+	output logic [1:0] branchD,
 	output logic regdstE, regwriteE,
 	output logic regwriteM, regwriteW,
 	output logic jumpD,
-	output logic [2:0] alucontrolE
+	output logic [2:0] alucontrolE,
+	input logic [31:0] srca2D, srcb2D
 );
 
 
@@ -23,14 +25,14 @@ module control
 	
 	maindec md
 	(
-		opD, memtoregD, memwriteD, branchD,
+		opD, memtoregD, memwriteD,
 		alusrcD, regdstD, regwriteD, jumpD,
-		aluopD
+		aluopD, branchD
 	);
 	
 	aludec ad(functD, aluopD, alucontrolD);
 	
-	assign pcsrcD = branchD & equalD;
+	branch_control _bc (srca2D, srcb2D, branchD, pcsrcD);
 	
 	// pipeline registers
 	reg_rc #(8) regE

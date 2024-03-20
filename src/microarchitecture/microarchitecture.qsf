@@ -91,6 +91,7 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_tb -section_id AL
 set_global_assignment -name SYSTEMVERILOG_FILE memory/dmem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE memory/imem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/control/aludec.sv
+set_global_assignment -name SYSTEMVERILOG_FILE processor/control/branch_control.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/control/control.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/control/maindec.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/datapath/ALU.sv
