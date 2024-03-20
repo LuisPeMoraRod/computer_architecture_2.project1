@@ -2,26 +2,34 @@
 module maindec
 (
 	input logic [5:0] op,
-	output logic memtoreg, memwrite,
-	output logic alusrc,
-	output logic regdst, regwrite,
+	output logic memtoReg, VmemtoReg, memWrite, memData, memSrc,
+	output logic ALUSrc,
+	output logic regDst, regWrite, VregWrite,
 	output logic jump,
-	output logic [1:0] aluop, branch
+	output logic [1:0] branch
 );
 
-	logic [9:0] controls;
-	assign {regwrite, regdst, alusrc, branch, memwrite, memtoreg, jump, aluop} = controls;
+	logic [11:0] controls;
+	assign {regWrite, VregWrite, memtoReg, VmemtoReg, memWrite, memData, memSrc, ALUSrc, regDst, branch, jump} = controls;
 	
 	always_comb
 		case(op)
-			6'b000000: controls = 10'b110_00_000_10; //Rtyp
-			6'b100011: controls = 10'b101_00_010_00; //LW
-			6'b101011: controls = 10'b001_00_100_00; //SW
-			6'b000100: controls = 10'b000_01_000_00; //BEQ
-			6'b000101: controls = 10'b000_10_000_00; //BLT
-			6'b001000: controls = 10'b101_00_000_00; //ADDI
-			6'b000010: controls = 10'b000_00_001_00; //J
-			default: controls = 10'bxxxxxxxxxx; //???
+			6'b000000: controls = 12'b100x_0xx_01_00_0; // add, sub
+			6'b010000: controls = 12'b100x_0xx_10_00_0; // addi
+			6'b000100: controls = 12'b100x_0xx_01_00_0; // add.fp, mul.fp
+			6'b001100: controls = 12'b01x1_0xx_01_00_0; // vadd.fp, vmul.fp, vsum.fp
+			6'b010001: controls = 12'b000x_1xx_10_00_0; // sw
+			6'b010010: controls = 12'b101x_0xx_10_00_0; // lw
+			6'b010101: controls = 12'b00x0_1xx_10_00_0; // sw.fp
+			6'b010110: controls = 12'b01x1_0xx_10_00_0; // lw.fp
+			6'b011101: controls = 12'b00x0_1xx_10_00_0; // vst
+			6'b011110: controls = 12'b01x1_0xx_10_00_0; // vld
+			6'b100000: controls = 12'b00xx_0xx_00_01_0; // beq
+			6'b100000: controls = 12'b00xx_0xx_00_10_0; // blt
+			6'b100010: controls = 12'b00xx_0xx_00_00_1; // j
+			6'b111111: controls = 12'b01x0_0xx_10_00_0; // vset.fp
+			  default: controls = 12'b00xx_0xx_xx_00_0; //???
+			  
 		endcase
 	
 endmodule
