@@ -116,12 +116,24 @@ def get_r_type(instruction: list) -> str:
     opcode = isa[mnemonic]['opcode']
     funct = isa[mnemonic]['funct']
 
-    if (mnemonic == ADD or mnemonic == SUB or mnemonic == MULT or mnemonic == SLT):
+    if (mnemonic == ADD or SUB ):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
         rt = get_register(instruction[3])
         shamt = '00000'
     
+    if (mnemonic == ADDFP or MULFP ):
+        rd = get_register(instruction[1])
+        rs = get_register(instruction[2])
+        rt = get_register(instruction[3])
+        shamt = '00000'
+    
+    if (mnemonic == VADDFP or VMULFP or VSUMFP):
+        rd = get_register(instruction[1])
+        rs = get_register(instruction[2])
+        rt = get_register(instruction[3])
+        shamt = '00000'
+    '''
     if (mnemonic == SLL or mnemonic == SRL):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
@@ -133,7 +145,7 @@ def get_r_type(instruction: list) -> str:
         rs = get_register(instruction[1])
         rt = '0000'
         shamt = '00000'
-
+    '''
     return opcode + rs + rt + rd + shamt + funct
 
 def get_i_type(i: int, instruction: list, labels: dict) -> str:
@@ -142,18 +154,23 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
     """
     mnemonic = instruction[0]
     opcode = isa[mnemonic]['opcode']
-
+    '''
     if (mnemonic == XORI):
         rt = get_register(instruction[1])
         rs = get_register(instruction[2])
         imm = xori_imm(instruction[3], labels)
-
-    if (mnemonic == BEQ or mnemonic == BGT):
+    '''
+    if (mnemonic == BEQ or mnemonic == BLT):
         rs = get_register(instruction[1])
         rt = get_register(instruction[2])
         imm = branch_imm(i, instruction[3], labels)
 
     if (mnemonic == SW or mnemonic == LW):
+        rt = get_register(instruction[1])
+        rs = get_register(instruction[2])
+        imm = '0' * IMM_SIZE
+
+    if (mnemonic == SWFP or mnemonic == LWFP):
         rt = get_register(instruction[1])
         rs = get_register(instruction[2])
         imm = '0' * IMM_SIZE

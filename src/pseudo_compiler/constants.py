@@ -9,36 +9,48 @@ IMM_SIZE = 13
 ADDR_SIZE = 21
 
 #mnemonics
-ADD = 'sume'
+ADD = 'suma'
 SUB = 'reste'
-MULT = 'multiplique'
-SLL = 'shift_i'
-SRL = 'shift_d'
-SLT = 'menor_que'
-JR = 'salte_r'
-XORI = 'xori'
+ADDFP = 'suma_fp'
+MULFP = 'mul_fp'
+VADDFP = 'v_suma_fp'
+VMULFP = 'v_mul_fp'
+VSUMFP = 'v_sumhor_fp'
+ADDI = 'suma_in'
 BEQ = 'salte_ig'
-BGT = 'salte_myq'
+BLT = 'salte_me'
 SW = 'guarde'
 LW = 'cargue'
+SWFP = 'guarde_fp'
+LWFP = 'cargue_fp'
+VSETFP = 'set_fp'
+VST = 'v_guarde_fp'
+VLD = 'v_cargue_fp'
 J = 'salte'
 END = 'fin'
+START = 'inicie'
 
 isa = {
-    ADD : {'type': R, 'opcode': '000', 'funct': '0000'},
-    SUB : {'type': R, 'opcode': '000', 'funct': '0001'},
-    MULT : {'type': R, 'opcode': '000', 'funct': '0010'},
-    SLL : {'type': R, 'opcode': '000', 'funct': '0011'},
-    SRL : {'type': R, 'opcode': '000', 'funct': '0100'},
-    SLT : {'type': R, 'opcode': '000', 'funct': '0101'},
-    JR : {'type': R, 'opcode': '000', 'funct': '0110'},
-    XORI : {'type': I, 'opcode': '001'},
-    BEQ : {'type': I, 'opcode': '010'},
-    BGT : {'type': I, 'opcode': '011'},
-    SW : {'type': I, 'opcode': '100'},
-    LW : {'type': I, 'opcode': '101'},
-    J : {'type': J, 'opcode': '110'},
-    END: {'type': None, 'opcode': '111'},
+    ADD : {'type': R, 'opcode': '000000', 'funct': '0000000'},
+    SUB : {'type': R, 'opcode': '000000', 'funct': '0000001'},
+    ADDFP : {'type': R, 'opcode': '000000', 'funct': '0000100'},
+    MULFP : {'type': R, 'opcode': '000000', 'funct': '0000110'},
+    VADDFP : {'type': R, 'opcode': '001100', 'funct': '1000100'},
+    VMULFP : {'type': R, 'opcode': '001100', 'funct': '1000110'},
+    VSUMFP : {'type': R, 'opcode': '001100', 'funct': '1100000'},
+    ADDI : {'type': I, 'opcode': '010000'},
+    BEQ : {'type': I, 'opcode': '100000'},
+    BLT : {'type': I, 'opcode': '100001'},
+    SW : {'type': I, 'opcode': '010001'},
+    LW : {'type': I, 'opcode': '010010'},
+    SWFP : {'type': I, 'opcode': '010101'},
+    LWFP : {'type': I, 'opcode': '010110'},
+    VSETFP : {'type': I, 'opcode': '111111'},
+    VST : {'type': I, 'opcode': '011101'},
+    VLD : {'type': I, 'opcode': '011110'},
+    J : {'type': J, 'opcode': '100010'},
+    END: {'type': None, 'opcode': '110001'},
+    START: {'type': None, 'opcode': '110010'},
 }
 
 #Registers names
