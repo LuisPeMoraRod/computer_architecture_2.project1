@@ -16,7 +16,7 @@ module maindec
 		case(op)
 			6'b000000: controls = 12'b100x_0xx_01_00_0; // add, sub
 			6'b010000: controls = 12'b100x_0xx_10_00_0; // addi
-			6'b000100: controls = 12'b100x_0xx_01_00_0; // add.fp, mul.fp
+			6'b000100: controls = 12'b01x0_0xx_01_00_0; // add.fp, mul.fp
 			6'b001100: controls = 12'b01x1_0xx_01_00_0; // vadd.fp, vmul.fp, vsum.fp
 			6'b010001: controls = 12'b000x_1xx_10_00_0; // sw
 			6'b010010: controls = 12'b101x_0xx_10_00_0; // lw
