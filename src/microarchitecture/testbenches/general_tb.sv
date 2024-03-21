@@ -2,9 +2,10 @@
 module general_tb();
 	logic clk;
 	logic reset;
+	logic [31:0] readdata2;
 	
 	// instantiate device to be tested
-	top dut(clk, reset);
+	top dut(clk, reset, readdata2);
 	
 	// initialize test
 	initial

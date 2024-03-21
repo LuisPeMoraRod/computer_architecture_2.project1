@@ -17,13 +17,13 @@ module dmem
 	output [15:0] q_a;
 	output [255:0] q_b;
 
-	logic [18:0]  address_a; //address input for port A (scalar)
-	logic [14:0]  address_b; //address input for port B (vectorial)
+	logic [17:0]  address_a; //address input for port A (scalar)
+	logic [13:0]  address_b; //address input for port B (vectorial)
 	
 	logic wren_a, wren_b;
 
-	assign address_a = addr[18:0]; // resize address for port A (scalar)
-	assign address_b = addr[14:0]; // resize address for port B (vectorial)
+	assign address_a = addr[17:0]; // resize address for port A (scalar)
+	assign address_b = addr[13:0]; // resize address for port B (vectorial)
 
 	assign wren_a = (w_enable && ~src_sel); // write to port A when src_sel = 0
 	assign wren_b = (w_enable && src_sel); // write to port B when src_sel = 1

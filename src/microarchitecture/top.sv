@@ -3,7 +3,8 @@
 
 module top
 (
-	input logic clk, reset
+	input logic clk, reset,
+	output logic [31:0] readdata2
 	
 );
 	logic [31:0] writedata, dataadr;
@@ -20,8 +21,9 @@ module top
 	imem imem (pcF[7:2], instr);
 	
 	
-	dmem ram_mem (clk, memwrite, src_sel, dataadr, writedata[15:0], w_data_b, q_a, q_b);
+	dmem ram_mem (clk, memwrite, src_sel, dataadr, writedata[15:0], {223'd0, writedata}, q_a, q_b);
 	
 	assign readdata = {16'b0, q_a};
+	assign readdata2 = q_b[31:0];
 
 endmodule
