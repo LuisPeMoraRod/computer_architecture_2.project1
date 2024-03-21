@@ -6,7 +6,7 @@ module control
 	input logic [5:0] opD, functD,
 	input logic flushE,
 	output logic memtoregE, memtoregM,
-	output logic memtoregW, memwriteM,
+	output logic memtoregW, memwriteM, memsrcD,
 	output logic pcsrcD, alusrcE,
 	output logic [1:0] branchD,
 	output logic regdstE, regwriteE,
@@ -19,7 +19,7 @@ module control
 
 	logic [1:0] aluopD;
 	logic memtoregD, memwriteD, alusrcD, scalarD, 
-			regdstD, regwriteD, VregwriteD, memdataD, memsrcD;
+			regdstD, regwriteD, VregwriteD, memdataD;
 	logic [2:0] alucontrolD;
 	logic memwriteE;
 	
@@ -28,7 +28,7 @@ module control
 	(
 		opD,
 		regwriteD, VregwriteD, 
-		memtoregD, memwrite, memdataD, memsrcD,
+		memtoregD, memwriteD, memdataD, memsrcD,
 		alusrcD, scalarD, regdstD, 
 		branchD,
 		jumpD,	

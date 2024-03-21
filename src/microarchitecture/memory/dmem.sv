@@ -39,5 +39,4 @@ module dmem
 		.q_a(q_a),
 		.q_b(q_b)
 	);
-
 endmodule

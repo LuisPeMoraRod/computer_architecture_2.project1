@@ -3,7 +3,7 @@ module maindec
 (
 	input logic [5:0] op,
 	output logic regWrite, VregWrite,
-	output logic memtoReg, VmemtoReg, memWrite, memData, memSrc,
+	output logic memtoReg, memWrite, memData, memSrc,
 	output logic ALUSrc, scalar, regDst, 
 	output logic [1:0] branch, 
 	output logic jump,
@@ -26,12 +26,12 @@ module maindec
 			6'b011101: controls = 14'b_00_0101_100_00_0_00; // vst
 			6'b011110: controls = 14'b_01_1001_100_00_0_00; // vld
 			6'b100000: controls = 14'b_00_0000_000_01_0_00; // beq
-			6'b100000: controls = 14'b_00_0000_000_10_0_00; // blt
+			6'b100001: controls = 14'b_00_0000_000_10_0_00; // blt
 			6'b100010: controls = 14'b_00_0000_000_00_1_00; // j
 			6'b111111: controls = 14'b_01_0000_100_00_0_10; // vset.fp
 			6'b110010: controls = 14'b_00_0000_000_00_0_00; // start
 			6'b110001: controls = 14'b_00_0000_000_00_0_00; // close
-			  default: controls = 14'b_00_0000_000_00_0_00; // ???
+			  default: controls = 14'b_00_0000_000_00_0_00; // ??
 			  
 		endcase
 	

@@ -53,7 +53,7 @@ module datapath
 	
 	
 	// register file
-	regfile rf(clk, regwriteW, rsD, rtD, writeregW, resultW, srcaD, srcbD);
+	regfile rf(clk, reset, regwriteW, rsD, rtD, writeregW, resultW, srcaD, srcbD);
 	
 	
 	// Fetch stage
