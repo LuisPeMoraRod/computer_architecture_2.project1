@@ -18,21 +18,28 @@ module control
 
 
 	logic [1:0] aluopD;
-	logic memtoregD, memwriteD, alusrcD,
-			regdstD, regwriteD;
+	logic memtoregD, memwriteD, alusrcD, scalarD, 
+			regdstD, regwriteD, VregwriteD, memdataD, memsrcD;
 	logic [2:0] alucontrolD;
 	logic memwriteE;
 	
+	
 	maindec md
 	(
-		opD, memtoregD, memwriteD,
-		alusrcD, regdstD, regwriteD, jumpD,
-		aluopD, branchD
+		opD,
+		regwriteD, VregwriteD, 
+		memtoregD, memwrite, memdataD, memsrcD,
+		alusrcD, scalarD, regdstD, 
+		branchD,
+		jumpD,	
+		aluopD
 	);
 	
 	aludec ad(functD, aluopD, alucontrolD);
 	
 	branch_control _bc (srca2D, srcb2D, branchD, pcsrcD);
+	
+	
 	
 	// pipeline registers
 	reg_rc #(8) regE
