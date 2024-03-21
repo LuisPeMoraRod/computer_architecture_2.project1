@@ -146,6 +146,8 @@ def get_r_type(instruction: list) -> str:
         rt = '0000'
         shamt = '00000'
     '''
+    print("R opcode:", opcode, " rs:", rs, " rt:", rt, " rd:", rd, " shamt:", shamt, " funct:", funct)
+    print("R opcode:", len(opcode), " rs:", len(rs), " rt:", len(rt), " rd:", len(rd), " shamt:", len(shamt), " funct:", len(funct))
     return opcode + rs + rt + rd + shamt + funct
 
 def get_i_type(i: int, instruction: list, labels: dict) -> str:
@@ -175,6 +177,8 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
         rs = get_register(instruction[2])
         imm = '0' * IMM_SIZE
 
+    print("I opcode:", opcode, " rs:", rs, " imm:", imm)
+    print("I opcode:", len(opcode), " rs:", len(rs), " imm:", len(imm))
     return opcode + rs + rt + imm
 
 def get_j_type(instruction: list, labels: dict) -> str:
@@ -184,6 +188,9 @@ def get_j_type(instruction: list, labels: dict) -> str:
     mnemonic = instruction[0]
     opcode = isa[mnemonic]['opcode']
     addr = jump_imm(instruction[1], labels)
+
+    print("J opcode:", addr, " addr:")
+    print("J opcode:", len(opcode), " addr:", len(addr))
     return opcode + addr
 
 #-----------------------------------------------------------------------
