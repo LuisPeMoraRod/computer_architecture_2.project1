@@ -1,22 +1,43 @@
 
 module dmem
 (
-	input logic clk, we,
-	input logic [31:0] a, wd,
-	output logic [31:0] rd
+	clk, // clock signal
+	w_enable, //write enable
+	src_sel, // source selector (0=scalar, 1=vectorial)
+	addr, // memory address
+	w_data_a, // input data to be written (scalar)
+	w_data_b, // input data to be written (vectorial)
+	q_a, // output signal with data read (16 bits)
+	q_b // output signal with data read (256 bits)
 );
+	input clk, w_enable, src_sel;
+	input [31:0] addr;
+	input [15:0] w_data_a;
+	input [255:0] w_data_b;
+	output [15:0] q_a;
+	output [255:0] q_b;
 
-	reg [31:0] RAM[63:0];
+	logic [18:0]  address_a; //address input for port A (scalar)
+	logic [14:0]  address_b; //address input for port B (vectorial)
 	
-	initial
-	begin
-		$readmemh("memdata.dat",RAM);
-	end
-	
-	assign rd = RAM[a[31:2]]; // word aligned
-	
-	always @(posedge clk)
-		if (we)
-			RAM[a[31:2]] <= wd;
-	
+	logic wren_a, wren_b;
+
+	assign address_a = addr[18:0]; // resize address for port A (scalar)
+	assign address_b = addr[14:0]; // resize address for port B (vectorial)
+
+	assign wren_a = (w_enable && ~src_sel); // write to port A when src_sel = 0
+	assign wren_b = (w_enable && src_sel); // write to port B when src_sel = 1
+
+	ram ram_data (
+		.address_a(address_a),
+		.address_b(address_b),
+		.clock(clk),
+		.data_a(w_data_a),
+		.data_b(w_data_b),
+		.wren_a(wren_a),
+		.wren_b(wren_b),
+		.q_a(q_a),
+		.q_b(q_b)
+	);
+
 endmodule
