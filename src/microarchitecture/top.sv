@@ -7,6 +7,7 @@ module top
 	output logic [31:0] readdata2
 	
 );
+
 	logic [31:0] writedata, dataadr;
 	logic memwrite;
 	logic [31:0] pcF, instr, readdata;
@@ -16,7 +17,8 @@ module top
 	logic [255:0] q_b;
 	
 
-	simd_processor processor (clk, reset, pcF, instr, memwrite, src_sel, dataadr, writedata, readdata);
+	simd_processor processor (clk, reset, pcF, instr, memwrite, src_sel, dataadr, writedata, readdata, w_data_b, q_b);
+
 	
 	imem imem (pcF[7:2], instr);
 	
