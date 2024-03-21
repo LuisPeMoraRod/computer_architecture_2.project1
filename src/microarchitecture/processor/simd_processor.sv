@@ -8,16 +8,16 @@ module simd_processor
 	input logic clk, reset,
 	output logic [31:0] pcF,
 	input logic [31:0] instrF,
-	output logic memwriteM,
+	output logic memwriteM, memsrcM,
 	output logic [31:0] aluoutM, writedataM,
 	input logic [31:0] readdataM
 );
 
 	logic [5:0] opD, functD;
-	logic regdstE, alusrcE,
-			pcsrcD,
+	logic regdstE, alusrcE, scalarE,
+			pcsrcD, memdataM,
 			memtoregE, memtoregM, memtoregW,
-			regwriteE, regwriteM, regwriteW;
+			regwriteE, regwriteM, regwriteW, VregwriteW;
 	logic [2:0] alucontrolE;
 	logic flushE;
 	logic jumpD; 
@@ -26,24 +26,27 @@ module simd_processor
 	
 	control c
 	(
-		clk, reset, opD, functD, flushE,
-		memtoregE, memtoregM,
-		memtoregW, memwriteM, 
-		pcsrcD, alusrcE, 
-		branchD, 
-		regdstE, regwriteE,
-		regwriteM, regwriteW, jumpD,
+		clk, reset, opD, functD, 
+		srca2D, srcb2D,
+		flushE,
+		jumpD,
+		branchD,
+		pcsrcD, alusrcE, scalarE,
 		alucontrolE,
-		srca2D, srcb2D
+		regdstE, 
+		memwriteM, memdataM, memsrcM,
+		regwriteE, regwriteM, regwriteW, VregwriteW,
+		memtoregE, memtoregM, memtoregW
 	);
 	
 	datapath dp
 	(
-		clk, reset, memtoregE, memtoregM,
-		memtoregW, pcsrcD, branchD,
-		alusrcE, regdstE, regwriteE,
-		regwriteM, regwriteW, jumpD,
-		alucontrolE,
+		clk, reset, 
+		memtoregE, memdataM, memtoregM, memtoregW, 
+		pcsrcD, branchD,
+		alusrcE, regdstE, scalarE,
+		regwriteE, regwriteM, regwriteW, VregwriteW,
+		jumpD, alucontrolE,
 		pcF, instrF,
 		aluoutM, writedataM, readdataM,
 		opD, functD, flushE,

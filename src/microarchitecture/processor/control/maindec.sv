@@ -3,7 +3,7 @@ module maindec
 (
 	input logic [5:0] op,
 	output logic regWrite, VregWrite,
-	output logic memtoReg, VmemtoReg, memWrite, memData, memSrc,
+	output logic memtoReg, memWrite, memData, memSrc,
 	output logic ALUSrc, scalar, regDst, 
 	output logic [1:0] branch, 
 	output logic jump,

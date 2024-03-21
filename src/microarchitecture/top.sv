@@ -9,9 +9,9 @@ module top
 );
 
 	logic [31:0] pc, instr, readdata;
-	
+	logic memsrc;
 
-	simd_processor processor (clk, reset, pc, instr, memwrite, dataadr, writedata, readdata);
+	simd_processor processor (clk, reset, pc, instr, memwrite, memsrc, dataadr, writedata, readdata);
 	
 	imem imem (pc[7:2], instr);
 	
