@@ -16,7 +16,7 @@ module top
 	logic [255:0] q_b;
 	
 
-	simd_processor processor (clk, reset, pcF, instr, memwrite, src_sel, dataadr, writedata, readdata);
+	simd_processor processor (clk, reset, pcF, instr, memwrite, src_sel, dataadr, writedata, readdata, w_data_b, q_b);
 
 	
 	imem imem (pcF[7:2], instr);

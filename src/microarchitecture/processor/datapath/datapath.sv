@@ -3,7 +3,7 @@
 module datapath
 (
 	input logic clk, reset,
-	input logic memtoregE, memdataM, memtoregM, memtoregW,
+	input logic memtoregE, memdataM, memsrcM, memtoregM, memtoregW,
 	input logic pcsrcD, 
 	input logic [1:0] branchD,
 	input logic alusrcE, regdstE, scalarE,
@@ -12,11 +12,14 @@ module datapath
 	input logic [2:0] alucontrolE,
 	output logic [31:0] pcF,
 	input logic [31:0] instrF,
-	output logic [31:0] aluoutM,writedataM,
+	output logic [31:0] aluoutM,
+	output logic [31:0] writedataM,
 	input logic [31:0] readdataM,
 	output logic [5:0] opD, functD,
 	output logic flushE,
-	output logic [31:0] srca2D, srcb2D
+	output logic [31:0] srca2D, srcb2D,
+	output logic [255:0] ValuoutM,
+	input logic [255:0] Vmemout
 );
 
 
@@ -30,14 +33,16 @@ module datapath
 	logic [31:0] signimmD, signimmE, signimmshD;
 	logic [31:0] srcaD, srcaE, srca2E;
 	logic [31:0] srcbD, srcbE, srcb2E, srcb3E;
+	logic [15:0] srcmem;
 	logic [31:0] pcplus4D, instrD;
 	logic [31:0] aluoutE, aluoutW;
 	logic [31:0] readdataW, resultW;
 	logic [3:0] flags;
 	logic [255:0] VsrcaD, VsrcaE, Vsrca2E;
-	logic [255:0] VsrcbD, VsrcbE, Vsrcb2E, Vsrcb3E;
-	logic [255:0] VresultW;
+	logic [255:0] VsrcbD, VsrcbE, Vsrcb2E;
+	logic [255:0] VresultW, ValuoutE, extVector, ValuoutW, VreadDataM, VreadDataW;
 	logic [1:0] VforwardaE, VforwardbE;
+	logic [63:0] Vflags;
 	
 	
 	// hazard detection
@@ -109,19 +114,26 @@ module datapath
 	mux3 #(256) Vforwardaemux (VsrcaE, VresultW, ValuoutM, VforwardaE, Vsrca2E);
 	mux3 #(256) Vforwardbemux (VsrcbE, VresultW, ValuoutM, VforwardbE, Vsrcb2E);
 	
-	ALU_vec alu_vec(Vsrca2E, Vsrcb3E, alucontrolE, aluoutE, flags);
+	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, alucontrolE, scalarE, ValuoutE, Vflags);
 	
 	
 	// Memory stage
 	reg_r #(32) r1M(clk, reset, srcb2E, writedataM);
 	reg_r #(32) r2M(clk, reset, aluoutE, aluoutM);
 	reg_r #(5) r3M(clk, reset, writeregE, writeregM);
+	reg_r #(256) r4M(clk, reset, ValuoutE, ValuoutM);
 	
+	mux2 #(16) memDatamux (writedataM[15:0], ValuoutM[15:0], memdataM, srcmem);
+	mux2 #(256) memSrcmux (extVector, Vmemout, memsrcM, VreadDataM);
 	
 	// Writeback stage
 	reg_r #(32) r1W (clk, reset, aluoutM, aluoutW);
 	reg_r #(32) r2W (clk, reset, readdataM, readdataW);
 	reg_r #(5) r3W (clk, reset, writeregM, writeregW);
+	reg_r #(256) r4W (clk, reset, ValuoutM, ValuoutW);
+	reg_r #(256) r5W (clk, reset, VreadDataM, VreadDataW);
+	
 	mux2 #(32) resmux (aluoutW, readdataW, memtoregW, resultW);
+	mux2 #(256) regWmux (ValuoutW, VreadDataW, memtoregW, VresultW);
 	
 endmodule
