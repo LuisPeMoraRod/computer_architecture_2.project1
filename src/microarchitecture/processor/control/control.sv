@@ -22,7 +22,7 @@ module control
 	logic memtoregD, memwriteD, alusrcD, scalarD, 
 			regdstD, regwriteD, VregwriteD, memdataD;
 	logic [2:0] alucontrolD;
-	logic memwriteE, memdataE, memsrcE;
+	logic memwriteE, memdataE, memsrcD, memsrcE;
 	logic VregwriteE, VmemtoregM, VregwriteM;
 	
 	
@@ -44,16 +44,16 @@ module control
 	
 	
 	// pipeline registers
-	reg_rc #(13) regE
+	reg_rc #(12) regE
 	(
 		clk, reset, flushE,
 		{memtoregD, memwriteD, memdataD, memsrcD, alusrcD, scalarD, regdstD, regwriteD, VregwriteD, alucontrolD},
 		{memtoregE, memwriteE, memdataE, memsrcE, alusrcE, scalarE, regdstE, regwriteE, VregwriteE, alucontrolE}
 	);
-	reg_r #(7) regM (clk, reset, 
+	reg_r #(6) regM (clk, reset, 
 		{memtoregE, memwriteE, memdataE, memsrcE, regwriteE, VregwriteE}, 
 		{memtoregM, memwriteM, memdataM, memsrcM, regwriteM, VregwriteM});
-	reg_r #(4) regW (clk, reset, 
+	reg_r #(3) regW (clk, reset, 
 		{memtoregM, regwriteM, VregwriteM}, 
 		{memtoregW, regwriteW, VregwriteW});
 	
