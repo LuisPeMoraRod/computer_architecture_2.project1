@@ -57,7 +57,7 @@ module datapath
 	
 	
 	// register file
-	regfile rf(clk, regwriteW, rsD, rtD, writeregW, resultW, srcaD, srcbD);
+	regfile rf(clk, reset, regwriteW, rsD, rtD, writeregW, resultW, srcaD, srcbD);
 	
 	// Vector register file 
 	regfile_vec rf_v(clk, VregwriteW, rsD[2:0], rtD[2:0], writeregW[2:0], VresultW, VsrcaD, VsrcbD);

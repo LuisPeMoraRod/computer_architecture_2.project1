@@ -8,7 +8,7 @@ module simd_processor
 	input logic clk, reset,
 	output logic [31:0] pcF,
 	input logic [31:0] instrF,
-	output logic memwriteM, memsrcM,
+	output logic memwriteM, src_sel,
 	output logic [31:0] aluoutM, writedataM,
 	input logic [31:0] readdataM
 );
@@ -26,6 +26,7 @@ module simd_processor
 	
 	control c
 	(
+
 		clk, reset, opD, functD, 
 		srca2D, srcb2D,
 		flushE,
@@ -34,7 +35,7 @@ module simd_processor
 		pcsrcD, alusrcE, scalarE,
 		alucontrolE,
 		regdstE, 
-		memwriteM, memdataM, memsrcM,
+		memwriteM, memdataM, src_sel,
 		regwriteE, regwriteM, regwriteW, VregwriteW,
 		memtoregE, memtoregM, memtoregW
 	);
