@@ -34,6 +34,7 @@ def get_instructions(input_file_name : str) -> tuple:
         with open(input_file_name, mode="r") as f:
             instructions = clean_instructions(f)
             instructions, labels = get_labels(instructions)
+            print(labels)
         return (instructions, labels)
 
     except Exception as e:
@@ -156,12 +157,12 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
     """
     mnemonic = instruction[0]
     opcode = isa[mnemonic]['opcode']
-    '''
-    if (mnemonic == XORI):
+    
+    if (mnemonic == ADDI):
         rt = get_register(instruction[1])
         rs = get_register(instruction[2])
-        imm = xori_imm(instruction[3], labels)
-    '''
+        imm = addi_imm(instruction[3], labels)
+    
     if (mnemonic == BEQ or mnemonic == BLT):
         rs = get_register(instruction[1])
         rt = get_register(instruction[2])
@@ -196,7 +197,7 @@ def get_j_type(instruction: list, labels: dict) -> str:
 #-----------------------------------------------------------------------
 # Methods to compute immediate binary values for different types of instructions
 
-def xori_imm(imm, labels):
+def addi_imm(imm, labels):
     try:
         imm = labels[imm]
         bin_str = to_bin(imm, IMM_SIZE)

@@ -17,8 +17,8 @@
 		for (i = 0; i < NUM_INSTANCES; i = i + 1) begin : alu_instance
 
 			ALU_vec_aux alu (
-				.a(a[15 + bits_index*i : 0 + bits_index*i]),
-				.b(b[15 + bits_index*i : 0 + bits_index*i]),
+				.data_a(a[15 + bits_index*i : 0 + bits_index*i]),
+				.data_b(b[15 + bits_index*i : 0 + bits_index*i]),
 				.opcode(opcode), 
 				.flag_scalar(flag_scalar),
 				.instance_num(i),
