@@ -2,26 +2,37 @@
 module maindec
 (
 	input logic [5:0] op,
-	output logic memtoreg, memwrite,
-	output logic alusrc,
-	output logic regdst, regwrite,
+	output logic regWrite, VregWrite,
+	output logic memtoReg, memWrite, memData, memSrc,
+	output logic ALUSrc, scalar, regDst, 
+	output logic [1:0] branch, 
 	output logic jump,
-	output logic [1:0] aluop, branch
+	output logic [1:0] aluop
 );
 
-	logic [9:0] controls;
-	assign {regwrite, regdst, alusrc, branch, memwrite, memtoreg, jump, aluop} = controls;
+	logic [13:0] controls;
+	assign {regWrite, VregWrite,   memtoReg, memWrite, memData, memSrc,   ALUSrc, scalar, regDst,   branch, jump, aluop} = controls;
 	
 	always_comb
 		case(op)
-			6'b000000: controls = 10'b110_00_000_10; //Rtyp
-			6'b100011: controls = 10'b101_00_010_00; //LW
-			6'b101011: controls = 10'b001_00_100_00; //SW
-			6'b000100: controls = 10'b000_01_000_00; //BEQ
-			6'b000101: controls = 10'b000_10_000_00; //BLT
-			6'b001000: controls = 10'b101_00_000_00; //ADDI
-			6'b000010: controls = 10'b000_00_001_00; //J
-			default: controls = 10'bxxxxxxxxxx; //???
+			6'b000000: controls = 14'b_10_0000_001_00_0_10; // add, sub
+			6'b010000: controls = 14'b_10_0000_100_00_0_00; // addi
+			6'b000100: controls = 14'b_01_0000_011_00_0_10; // add.fp, mul.fp
+			6'b001100: controls = 14'b_01_0000_001_00_0_10; // vadd.fp, vmul.fp, vsum.fp
+			6'b010001: controls = 14'b_00_0100_100_00_0_00; // sw
+			6'b010010: controls = 14'b_10_1000_100_00_0_00; // lw
+			6'b010101: controls = 14'b_00_0110_100_00_0_00; // sw.fp
+			6'b010110: controls = 14'b_01_1010_100_00_0_00; // lw.fp
+			6'b011101: controls = 14'b_00_0101_100_00_0_00; // vst
+			6'b011110: controls = 14'b_01_1001_100_00_0_00; // vld
+			6'b100000: controls = 14'b_00_0000_000_01_0_00; // beq
+			6'b100001: controls = 14'b_00_0000_000_10_0_00; // blt
+			6'b100010: controls = 14'b_00_0000_000_00_1_00; // j
+			6'b111111: controls = 14'b_01_0000_100_00_0_10; // vset.fp
+			6'b110010: controls = 14'b_00_0000_000_00_0_00; // start
+			6'b110001: controls = 14'b_00_0000_000_00_0_00; // close
+			  default: controls = 14'b_00_0000_000_00_0_00; // ??
+			  
 		endcase
 	
 endmodule
