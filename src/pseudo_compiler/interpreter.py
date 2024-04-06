@@ -34,7 +34,6 @@ def get_instructions(input_file_name : str) -> tuple:
         with open(input_file_name, mode="r") as f:
             instructions = clean_instructions(f)
             instructions, labels = get_labels(instructions)
-            print(labels)
         return (instructions, labels)
 
     except Exception as e:
@@ -177,6 +176,11 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
         rt = get_register(instruction[1])
         rs = get_register(instruction[2])
         imm = '0' * IMM_SIZE
+
+    if (mnemonic == VSETFP):
+        rt = get_register(instruction[1])
+        rs = get_register(instruction[1])
+        imm = addi_imm(instruction[2], labels)
 
     print("I opcode:", opcode, " rs:", rs, " imm:", imm)
     print("I opcode:", len(opcode), " rs:", len(rs), " imm:", len(imm))
