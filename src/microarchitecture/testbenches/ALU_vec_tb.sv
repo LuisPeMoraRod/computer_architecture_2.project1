@@ -23,8 +23,8 @@ module ALU_vec_tb;
 	initial begin
 		// a = [1.5,   1.25, 3.5, 1.5,  0.5,  3.0,  1.25]
 		// b = [-1.75, 1.5,  2.0, 3,25, 5.75, -0.5, -1.5]
-		a = 256'h0180_0140_0380_0180_0080_0300_0140_5678_90AB_CDEF_1234_5678_90AB_CDEF_1234_5678; // Valor de entrada a
-		b = 256'hFE40_0180_0200_0340_05c0_FF80_FE80_5432_10FE_DCBA_9876_5432_10FE_DCBA_9876_5432; // Valor de entrada b
+		a = 256'h0180_0140_0380_0180_0080_0300_0140_0000_0000_0000_0000_0000_0000_0000_0000_0140; // Valor de entrada a
+		b = 256'hFE40_0180_0200_0340_05c0_FF80_FE80_0000_0000_0000_0000_0000_0000_0000_0000_FE80; // Valor de entrada b
 		opcode = 3'b010; // Operacion de multiplicacion
 		flag_scalar = 1'b0;
 
