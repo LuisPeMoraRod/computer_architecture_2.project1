@@ -14,12 +14,12 @@ module regfile_vec
 	
 	// Writing on falling edge
 	always_ff @(negedge clk) begin
-		if(rst) begin  
-			vrf[23:16] <= '{8{255'd0}};
-		end
-		if (vwe3) vrf[vwa3] <= vwd3;
+		if(rst)  
+			vrf[23:16] <= '{8{255'd0}};	//set all registers in zero
+		if (vwe3)
+			vrf[vwa3] <= vwd3;	// write register
 	end
-	assign vrd1 = (vra1 != 0) ? vrf[vra1] : 0;
-	assign vrd2 = (vra2 != 0) ? vrf[vra2] : 0;
+	assign vrd1 = vrf[vra1]; 	// read vector register 1
+	assign vrd2 = vrf[vra2];	// read vector register 2
 	
 endmodule
