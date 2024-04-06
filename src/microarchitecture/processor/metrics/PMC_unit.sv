@@ -11,10 +11,24 @@ module PMC_unit (
 );
 	
 	logic arith_enable, memory_enable; //Habilitar contadores de aritmetica y memoria 
+	logic [2:0] aluReg;
 	
 	always_comb begin //Evaluar señales de control
-		arith_enable = (aluControl_in == 3'b100) ? 1'b0 : 1'b1;
-		memory_enable = (memWrite_in | memToReg_in) ? 1'b1 : 1'b0; 
+		memory_enable <= (memWrite_in | memToReg_in) ? 1'b1 : 1'b0;
+	end
+	
+	always_ff @(posedge clk or posedge reset) begin
+		if (reset) begin
+        arith_enable <= 1'b0;
+        aluReg <= 3'b0; // Asegurarse de reiniciar aluReg en el reset
+		end else begin
+				if ((aluControl_in != 3'b100) && (aluReg != aluControl_in)) begin
+                arith_enable <= 1'b1;
+            end else begin
+                arith_enable <= 1'b0;
+            end
+            aluReg <= aluControl_in;
+		end
 	end
 		
 
