@@ -114,7 +114,7 @@ module datapath
 	mux3 #(256) Vforwardaemux (VsrcaE, VresultW, ValuoutM, VforwardaE, Vsrca2E);
 	mux3 #(256) Vforwardbemux (VsrcbE, VresultW, ValuoutM, VforwardbE, Vsrcb2E);
 	
-	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, alucontrolE, scalarE, ValuoutE, Vflags);
+	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, srcb3E, alucontrolE, scalarE, ValuoutE, Vflags);
 	
 	
 	// Memory stage
