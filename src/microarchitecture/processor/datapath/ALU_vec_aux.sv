@@ -1,6 +1,7 @@
 module ALU_vec_aux (
 	input [15:0] data_a,		// first operand
 	input [15:0] data_b,		// second operand
+	input [15:0] data_c,		// used to set value
 	input [2:0] opcode,			// code for operation
 	input flag_scalar,			// flag that indicates if its vectorial or scalar operation
 	input int instance_num,		// ALU ID
@@ -64,7 +65,13 @@ module ALU_vec_aux (
 
 					flags[0] = extended_result[16]; 	// Carry flag for add
 					flags[3] = (data_a[15] ^ result[15]) && ~(data_a[15] ^ data_b[15] ^ opcode[0]); // Overflow flag for add
-				end 
+				end
+
+				3'b111: begin // FP set
+					result = data_c;
+					flags[0] = 1'b0;
+					flags[3] = 1'b0;
+				end
 
 				default: // Operacion no valida
 					result = 16'b0;  
