@@ -1,6 +1,6 @@
 module ALU_vec_aux_tb;
 
-	reg [15:0] a, b;
+	reg [15:0] a, b, c;
 	reg [2:0] opcode;
 	reg flag_scalar;
 	int instance_num;
@@ -11,6 +11,7 @@ module ALU_vec_aux_tb;
 	ALU_vec_aux dut (
 		.data_a(a),
 		.data_b(b),
+		.data_c(c),
 		.opcode(opcode),
 		.flag_scalar(flag_scalar),
 		.instance_num(instance_num),
@@ -20,6 +21,7 @@ module ALU_vec_aux_tb;
 
 	initial begin
 		flag_scalar = 1'b0;
+		c = 16'h0000;
 		
 		// FP Q7.8 add test
 		a = 16'h0280; //2.5
@@ -133,5 +135,22 @@ module ALU_vec_aux_tb;
 		$display("Flags: %b", flags);
 		// Assert to verify the sub operation result
 		assert(result == 16'h0100 && flags[3]) else $error("Mult error: %h * %h != %h, expected %h\nFlags expected: %b", a, b, result, 16'hFE80, 4'b100x);
+	
+		//Test vset operation
+		opcode = 3'b111;
+		#10;
+		$display("\nSet: result = %h", result); // expected result = 0000
+		$display("Flags: %b", flags);
+		// Assert to verify the sub operation result
+		assert(result == 16'h0000) else $error("Set error: %h, expected %h", result, 16'h0000);
+		
+		//Test vset operation
+		c = 16'hFF00;
+		opcode = 3'b111;
+		#10;
+		$display("\nSet: result = %h", result); // expected result = FF00
+		$display("Flags: %b", flags);
+		// Assert to verify the sub operation result
+		assert(result == 16'hFF00) else $error("Set error: %h, expected %h", result, 16'hFF00);
 	end
 endmodule
