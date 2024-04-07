@@ -1,19 +1,21 @@
 module ALU_vec_tb;
 
-	// Senales de entrada
+	// Input signals
 	reg [255:0] a;
 	reg [255:0] b;
+	reg [15:0] c;
 	reg [2:0] opcode;
 	reg flag_scalar;
 
-	// Senales de salida
+	// Output signals
 	wire [255:0] result;
 	wire [63:0] flags;
 
-	// Instancia del modulo ALU_vec
+	// ALUC_vec module instance
 	ALU_vec uut (
 		.a(a),
 		.b(b),
+		.c(c),
 		.opcode(opcode),
 		.flag_scalar(flag_scalar),
 		.result(result),
@@ -56,6 +58,15 @@ module ALU_vec_tb;
 
 		// Show fp scalar add
 		$display("Result fp add scalar: %h", result);
+		$display("Flags: %b", flags);
+
+		flag_scalar = 1'b0;
+		opcode = 3'b111;
+		c = 16'hFF00;
+		#100;
+
+		// Show fp vector set
+		$display("Result fp vector set: %h", result);
 		$display("Flags: %b", flags);
 				
 	end
