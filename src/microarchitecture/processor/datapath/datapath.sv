@@ -7,7 +7,7 @@ module datapath
 	input logic pcsrcD, 
 	input logic [1:0] branchD,
 	input logic alusrcE, regdstE, scalarE,
-	input logic regwriteE, regwriteM, regwriteW, VregwriteW,
+	input logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 	input logic jumpD,
 	input logic [2:0] alucontrolE,
 	output logic [31:0] pcF,
@@ -48,11 +48,13 @@ module datapath
 	// hazard detection
 	hazard h
 	(
-		rsD, rtD, rsE, rtE, writeregE, writeregM,
-		writeregW,regwriteE, regwriteM, regwriteW,
-		memtoregE, memtoregM, branchD,
-		forwardaD, forwardbD, forwardaE,
-		forwardbE,
+		rsD, rtD, rsE, rtE, 
+		writeregE, writeregM, writeregW,
+		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+		memtoregE, memtoregM, 
+		branchD,
+		forwardaD, forwardbD, 
+		forwardaE, forwardbE, VforwardaE, VforwardbE,
 		stallF, stallD, flushE
 	);
 	
