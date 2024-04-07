@@ -62,7 +62,7 @@ module ALU_vec_tb;
 
 		flag_scalar = 1'b0;
 		opcode = 3'b111;
-		c = 16'hFF00;
+		c = 16'hFF00; //value to be set in all vector
 		#100;
 
 		// Show fp vector set
