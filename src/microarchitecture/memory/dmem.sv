@@ -28,15 +28,4 @@ module dmem
 	assign wren_a = (w_enable && ~src_sel); // write to port A when src_sel = 0
 	assign wren_b = (w_enable && src_sel); // write to port B when src_sel = 1
 
-	ram ram_data (
-		.address_a(address_a),
-		.address_b(address_b),
-		.clock(clk),
-		.data_a(w_data_a),
-		.data_b(w_data_b),
-		.wren_a(wren_a),
-		.wren_b(wren_b),
-		.q_a(q_a),
-		.q_b(q_b)
-	);
 endmodule
