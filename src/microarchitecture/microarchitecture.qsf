@@ -39,10 +39,10 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY control_tb
+set_global_assignment -name TOP_LEVEL_ENTITY top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "08:15:21  OCTOBER 01, 2023"
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.0 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -57,7 +57,7 @@ set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH control_tb -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH vec_load_store_tb -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME mips_16_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id mips_16_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME mips_16_tb -section_id mips_16_tb
@@ -88,8 +88,143 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME general_tb -section_id ge
 set_global_assignment -name EDA_TEST_BENCH_NAME ALU_vec_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ALU_vec_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_tb -section_id ALU_vec_tb
-set_global_assignment -name SYSTEMVERILOG_FILE memory/dmem.sv
+set_global_assignment -name EDA_TEST_BENCH_NAME regfile_vec_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id regfile_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME regfile_vec_tb -section_id regfile_vec_tb
+set_global_assignment -name BOARD "DE1-SoC Board"
+set_global_assignment -name EDA_TEST_BENCH_NAME ALU_vec_aux_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ALU_vec_aux_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_aux_tb -section_id ALU_vec_aux_tb
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -entity maindec -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -entity maindec -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -entity maindec -section_id Top
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -entity maindec -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_NAME control_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id control_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME control_tb -section_id control_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME simd_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id simd_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME simd_tb -section_id simd_tb
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_NAME sdram_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id sdram_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME sdram_tb -section_id sdram_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME write_fifo_vec_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id write_fifo_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME write_fifo_vec_tb -section_id write_fifo_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "800 ps" -section_id write_fifo_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME read_fifo_vec_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id read_fifo_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "800 ps" -section_id read_fifo_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME read_fifo_vec_tb -section_id read_fifo_vec_tb
+set_location_assignment PIN_AF14 -to clk
+set_location_assignment PIN_AB12 -to reset
+set_location_assignment PIN_AA14 -to button
+set_location_assignment PIN_AE26 -to s0[0]
+set_location_assignment PIN_AE27 -to s0[1]
+set_location_assignment PIN_AE28 -to s0[2]
+set_location_assignment PIN_AG27 -to s0[3]
+set_location_assignment PIN_AF28 -to s0[4]
+set_location_assignment PIN_AG28 -to s0[5]
+set_location_assignment PIN_AH28 -to s0[6]
+set_location_assignment PIN_AJ29 -to s1[0]
+set_location_assignment PIN_AH29 -to s1[1]
+set_location_assignment PIN_AH30 -to s1[2]
+set_location_assignment PIN_AG30 -to s1[3]
+set_location_assignment PIN_AF29 -to s1[4]
+set_location_assignment PIN_AF30 -to s1[5]
+set_location_assignment PIN_AD27 -to s1[6]
+set_location_assignment PIN_AH12 -to sdr_clk_clk
+set_location_assignment PIN_AK14 -to sdr_wire_addr[0]
+set_location_assignment PIN_AH14 -to sdr_wire_addr[1]
+set_location_assignment PIN_AG15 -to sdr_wire_addr[2]
+set_location_assignment PIN_AE14 -to sdr_wire_addr[3]
+set_location_assignment PIN_AB15 -to sdr_wire_addr[4]
+set_location_assignment PIN_AC14 -to sdr_wire_addr[5]
+set_location_assignment PIN_AD14 -to sdr_wire_addr[6]
+set_location_assignment PIN_AF15 -to sdr_wire_addr[7]
+set_location_assignment PIN_AH15 -to sdr_wire_addr[8]
+set_location_assignment PIN_AG13 -to sdr_wire_addr[9]
+set_location_assignment PIN_AG12 -to sdr_wire_addr[10]
+set_location_assignment PIN_AH13 -to sdr_wire_addr[11]
+set_location_assignment PIN_AJ14 -to sdr_wire_addr[12]
+set_location_assignment PIN_AF13 -to sdr_wire_ba[0]
+set_location_assignment PIN_AJ12 -to sdr_wire_ba[1]
+set_location_assignment PIN_AF11 -to sdr_wire_cas_n
+set_location_assignment PIN_AK13 -to sdr_wire_cke
+set_location_assignment PIN_AG11 -to sdr_wire_cs_n
+set_location_assignment PIN_AK6 -to sdr_wire_dq[0]
+set_location_assignment PIN_AJ7 -to sdr_wire_dq[1]
+set_location_assignment PIN_AK7 -to sdr_wire_dq[2]
+set_location_assignment PIN_AK8 -to sdr_wire_dq[3]
+set_location_assignment PIN_AK9 -to sdr_wire_dq[4]
+set_location_assignment PIN_AG10 -to sdr_wire_dq[5]
+set_location_assignment PIN_AK11 -to sdr_wire_dq[6]
+set_location_assignment PIN_AJ11 -to sdr_wire_dq[7]
+set_location_assignment PIN_AH10 -to sdr_wire_dq[8]
+set_location_assignment PIN_AJ10 -to sdr_wire_dq[9]
+set_location_assignment PIN_AJ9 -to sdr_wire_dq[10]
+set_location_assignment PIN_AH9 -to sdr_wire_dq[11]
+set_location_assignment PIN_AH8 -to sdr_wire_dq[12]
+set_location_assignment PIN_AH7 -to sdr_wire_dq[13]
+set_location_assignment PIN_AJ6 -to sdr_wire_dq[14]
+set_location_assignment PIN_AJ5 -to sdr_wire_dq[15]
+set_location_assignment PIN_AE13 -to sdr_wire_ras_n
+set_location_assignment PIN_AA13 -to sdr_wire_we_n
+set_location_assignment PIN_AB13 -to sdr_wire_dqm[0]
+set_location_assignment PIN_AK12 -to sdr_wire_dqm[1]
+set_location_assignment PIN_AC30 -to s2[6]
+set_location_assignment PIN_AC29 -to s2[5]
+set_location_assignment PIN_AD30 -to s2[4]
+set_location_assignment PIN_AC28 -to s2[3]
+set_location_assignment PIN_AB23 -to s2[0]
+set_location_assignment PIN_AE29 -to s2[1]
+set_location_assignment PIN_AD29 -to s2[2]
+set_location_assignment PIN_AD26 -to s3[0]
+set_location_assignment PIN_AC27 -to s3[1]
+set_location_assignment PIN_AD25 -to s3[2]
+set_location_assignment PIN_AC25 -to s3[3]
+set_location_assignment PIN_AB28 -to s3[4]
+set_location_assignment PIN_AB25 -to s3[5]
+set_location_assignment PIN_AB22 -to s3[6]
+set_location_assignment PIN_AA24 -to s4[0]
+set_location_assignment PIN_Y23 -to s4[1]
+set_location_assignment PIN_Y24 -to s4[2]
+set_location_assignment PIN_W22 -to s4[3]
+set_location_assignment PIN_W24 -to s4[4]
+set_location_assignment PIN_V23 -to s4[5]
+set_location_assignment PIN_W25 -to s4[6]
+set_global_assignment -name EDA_TEST_BENCH_NAME vec_load_store_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id vec_load_store_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "5000 ps" -section_id vec_load_store_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME vec_load_store_tb -section_id vec_load_store_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE mips_16_tb.sv -section_id mips_16_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/register_tb.sv -section_id register_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/D_FF_tb.sv -section_id D_FF_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/alu_tb.sv -section_id alu_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Add_tb.sv -section_id Add_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/sign_extend_tb.sv -section_id sign_extend_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/InstructionMem_tb.sv -section_id InstructionMem_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/dataMem_tb.sv -section_id dataMem_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/general_tb.sv -section_id general_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ALU_vec_tb.sv -section_id ALU_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/regfile_vec_tb.sv -section_id regfile_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ALU_vec_aux_tb.sv -section_id ALU_vec_aux_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/control_tb.sv -section_id control_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/simd_tb.sv -section_id simd_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/sdram_tb.sv -section_id sdram_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/write_fifo_vec_tb.sv -section_id write_fifo_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/read_fifo_vec_tb.sv -section_id read_fifo_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/vec_load_store_tb.sv -section_id vec_load_store_tb
 set_global_assignment -name SYSTEMVERILOG_FILE memory/imem.sv
+set_global_assignment -name QIP_FILE memory/file_buffer.qip
+set_global_assignment -name QSYS_FILE memory/sdram.qsys
+set_global_assignment -name QIP_FILE memory/sdram/synthesis/sdram.qip
+set_global_assignment -name QIP_FILE memory/read_fifo_vec.qip
+set_global_assignment -name QIP_FILE memory/write_fifo_vec.qip
+set_global_assignment -name SYSTEMVERILOG_FILE memory/vec_load_store.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/control/aludec.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/control/branch_control.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/control/control.sv
@@ -111,45 +246,16 @@ set_global_assignment -name SYSTEMVERILOG_FILE processor/reg_rcen.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/signext.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/sl2.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/simd_processor.sv
+set_global_assignment -name SYSTEMVERILOG_FILE display7.sv
 set_global_assignment -name SYSTEMVERILOG_FILE top.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/general_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/ALU_vec_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/ALU_vec_aux_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/regfile_vec_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME regfile_vec_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id regfile_vec_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME regfile_vec_tb -section_id regfile_vec_tb
-set_global_assignment -name BOARD "DE1-SoC Board"
-set_global_assignment -name EDA_TEST_BENCH_NAME ALU_vec_aux_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ALU_vec_aux_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_aux_tb -section_id ALU_vec_aux_tb
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -entity maindec -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -entity maindec -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -entity maindec -section_id Top
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -entity maindec -section_id Top
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/control_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME control_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id control_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME control_tb -section_id control_tb
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/simd_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME simd_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id simd_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME simd_tb -section_id simd_tb
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name EDA_TEST_BENCH_FILE mips_16_tb.sv -section_id mips_16_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/register_tb.sv -section_id register_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/D_FF_tb.sv -section_id D_FF_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/alu_tb.sv -section_id alu_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Add_tb.sv -section_id Add_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/sign_extend_tb.sv -section_id sign_extend_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/InstructionMem_tb.sv -section_id InstructionMem_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/dataMem_tb.sv -section_id dataMem_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/general_tb.sv -section_id general_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ALU_vec_tb.sv -section_id ALU_vec_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/regfile_vec_tb.sv -section_id regfile_vec_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ALU_vec_aux_tb.sv -section_id ALU_vec_aux_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/control_tb.sv -section_id control_tb
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/simd_tb.sv -section_id simd_tb
+set_global_assignment -name SYSTEMVERILOG_FILE testbenches/write_fifo_vec_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE testbenches/read_fifo_vec_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE testbenches/sdram_test.sv
+set_global_assignment -name SYSTEMVERILOG_FILE testbenches/vec_load_store_tb.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
