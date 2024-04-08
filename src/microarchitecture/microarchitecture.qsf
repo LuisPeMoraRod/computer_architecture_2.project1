@@ -39,10 +39,10 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY PMC_tb
+set_global_assignment -name TOP_LEVEL_ENTITY top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "08:15:21  OCTOBER 01, 2023"
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.0 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -57,7 +57,7 @@ set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH PMC_tb -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH general_tb -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME mips_16_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id mips_16_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME mips_16_tb -section_id mips_16_tb
@@ -88,6 +88,29 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME general_tb -section_id ge
 set_global_assignment -name EDA_TEST_BENCH_NAME ALU_vec_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ALU_vec_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_tb -section_id ALU_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME regfile_vec_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id regfile_vec_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME regfile_vec_tb -section_id regfile_vec_tb
+set_global_assignment -name BOARD "DE1-SoC Board"
+set_global_assignment -name EDA_TEST_BENCH_NAME ALU_vec_aux_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ALU_vec_aux_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_aux_tb -section_id ALU_vec_aux_tb
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -entity maindec -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -entity maindec -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -entity maindec -section_id Top
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -entity maindec -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_NAME control_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id control_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME control_tb -section_id control_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME simd_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id simd_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME simd_tb -section_id simd_tb
+set_location_assignment PIN_AF14 -to clk
+set_location_assignment PIN_AB12 -to reset
+set_global_assignment -name SYSTEMVERILOG_FILE testbenches/sum_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE processor/datapath/sum.sv
+set_global_assignment -name LICENSE_FILE meminstr.dat
+set_global_assignment -name MIF_FILE memory/ram.mif
 set_global_assignment -name SYSTEMVERILOG_FILE memory/dmem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE memory/imem.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/control/aludec.sv
@@ -116,25 +139,12 @@ set_global_assignment -name SYSTEMVERILOG_FILE testbenches/general_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/ALU_vec_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/ALU_vec_aux_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/regfile_vec_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME regfile_vec_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id regfile_vec_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME regfile_vec_tb -section_id regfile_vec_tb
-set_global_assignment -name BOARD "DE1-SoC Board"
-set_global_assignment -name EDA_TEST_BENCH_NAME ALU_vec_aux_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ALU_vec_aux_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_aux_tb -section_id ALU_vec_aux_tb
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -entity maindec -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -entity maindec -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -entity maindec -section_id Top
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -entity maindec -section_id Top
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/control_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME control_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id control_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME control_tb -section_id control_tb
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/simd_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME simd_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id simd_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME simd_tb -section_id simd_tb
+set_global_assignment -name QIP_FILE memory/buffer.qip
+set_global_assignment -name EDA_TEST_BENCH_NAME sum_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id sum_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME sum_tb -section_id sum_tb
 set_global_assignment -name SYSTEMVERILOG_FILE processor/counter.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/metrics/PMC_unit.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/PMC_tb.sv
@@ -155,6 +165,7 @@ set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/regfile_vec_tb.sv -s
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ALU_vec_aux_tb.sv -section_id ALU_vec_aux_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/control_tb.sv -section_id control_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/simd_tb.sv -section_id simd_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/sum_tb.sv -section_id sum_tb
 set_global_assignment -name EDA_TEST_BENCH_NAME PMC_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id PMC_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME PMC_tb -section_id PMC_tb

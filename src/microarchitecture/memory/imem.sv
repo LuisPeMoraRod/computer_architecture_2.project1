@@ -10,7 +10,7 @@ module imem
 	
 	initial
 	begin
-		$readmemh("meminstr.dat",RAM);
+		$readmemb("meminstr.dat",RAM);
 	end
 	
 	assign rd = RAM[a]; // word aligned

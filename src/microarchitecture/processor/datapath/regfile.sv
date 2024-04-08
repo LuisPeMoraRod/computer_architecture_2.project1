@@ -10,21 +10,19 @@ module regfile
 	output logic [31:0] rd1, rd2
 );
 
-
 	logic [31:0] rf[31:0];
 	
 	// Writing on falling edge
 	always_ff @(negedge clk) begin
-		if(rst) begin  
-			//rf[0] <=  32'h00000;  // $zero
-			rf[31:0] <= '{32{32'd0}};
-		end
+		if(rst)
+			rf[31:0] <= '{32{32'd0}};	// set initial value
 		
-		if (we3) rf[wa3] <= wd3;
+		if (we3 && wa3 != 4'b0) 
+			rf[wa3] <= wd3;	// write register value (ignore if trying to write $zero)
 	end
 	
-	assign rd1 = rf[ra1];
-	assign rd2 = rf[ra2];
+	assign rd1 = rf[ra1];	// read register 1
+	assign rd2 = rf[ra2];	// read register 2
 	
 endmodule
  
