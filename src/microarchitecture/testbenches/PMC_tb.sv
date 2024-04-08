@@ -4,11 +4,18 @@ module PMC_tb();
     logic reset;   // Señal de reset
     logic memWrite_in, memToReg_in; //Senales de control
 	 logic [2:0] aluControl_in;
-    logic stall_enable; //Habilitar contador de stalls
-	 logic [31:0] stall_count; // Out stall_count
-    logic [31:0] instr_cycle_count; // Out instr_cycle_count
+    logic [1:0]stall_enable; //Habilitar contador de stalls
+	 logic [5:0] opcode_in, funct_in; // señales desde al menos execute en adelante
+	 logic jmp_in; // señal desde unidad de control
+	 logic [1:0] branch_in; // señal desde unidad de control
+	 
+	 
+	 logic [31:0] stall_count, CPI_numerator, CPI_denominator; // Out stall_count
+    logic [15:0] cycles_per_instruction; // Out instr_cycle_count
     logic [31:0] arith_count; // Out arith_count
 	 logic [31:0] mem_access_count;  // Out mem_access_Count
+	 logic [31:0] mem_read_count, mem_write_count;
+	 logic [31:0] ADD_count, SUB_count, ADDI_count, ADD_FP_count, MUL_FP_count, VADD_FP_count, VMUL_FP_count, VSUM_FP_count, VSET_FP_count, SW_count, LW_count, SW_FP_count, LW_FP_count, VST_count, VLD_count, BEQ_count, BLT_count, J_count;
 	
 	// instantiate device to be tested
 	PMC_unit dut(
@@ -16,41 +23,226 @@ module PMC_tb();
     memWrite_in, memToReg_in, 
 	 aluControl_in,
     stall_enable, //Habilitar contador de stalls
-	 stall_count, // Out stall_count
-    instr_cycle_count, // Out instr_cycle_count
+	 opcode_in, funct_in, // señales desde al menos execute en adelante
+	 jmp_in, // señal desde unidad de control
+	 branch_in,
+	 stall_count, CPI_numerator, CPI_denominator,// Out stall_count
+    cycles_per_instruction, // Out instr_cycle_count
     arith_count, // Out arith_count
-	 mem_access_count  // Out mem_access_Count
+	 mem_access_count,  // Out mem_access_Count
+	 mem_read_count, mem_write_count,
+	 ADD_count, SUB_count, ADDI_count, ADD_FP_count, MUL_FP_count, VADD_FP_count, VMUL_FP_count, VSUM_FP_count, VSET_FP_count, SW_count, LW_count, SW_FP_count, LW_FP_count, VST_count, VLD_count, BEQ_count, BLT_count, J_count
+
 	);
 	// initialize test
 	initial
 	begin
 		reset <= 1;
+		
 		memWrite_in<=0; 
 		memToReg_in<=0;
 		stall_enable<=0;
 		aluControl_in <=3'b100;
-		# 12; reset <= 0;
+		opcode_in<=6'b000000;
+		funct_in<=6'b000000; 
+		jmp_in<=0; 
+		branch_in<=2'b00;
+		# 10; 
+		reset <= 0;
 		#10
-		memWrite_in<=1;
-		#25
-		memWrite_in<=0;
-		#10
-		memToReg_in<=1;
-		stall_enable<=1;
+		for (int i = 0; i < 10; i++) begin
+			//ADD
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b010;
+			opcode_in<=6'b000000;
+			funct_in<=6'b000000; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//SUB
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b110;
+			opcode_in<=6'b000000;
+			funct_in<=6'b000001; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//ADDI
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b010;
+			opcode_in<=6'b010000;
+			funct_in<=6'b000000; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//ADD.FP
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b010;
+			opcode_in<=6'b000100;
+			funct_in<=6'b000100; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//MUL.FP
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b000;
+			opcode_in<=6'b000100;
+			funct_in<=6'b000110; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//VADD.FP
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b010;
+			opcode_in<=6'b001100;
+			funct_in<=6'b100100; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//VMUL.FP
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b000;
+			opcode_in<=6'b001100;
+			funct_in<=6'b100110; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//vSUM.FP
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b011;
+			opcode_in<=6'b001100;
+			funct_in<=6'b110000; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//SW
+			memWrite_in<=1; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b010001;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//LW
+			memWrite_in<=0; 
+			memToReg_in<=1;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b010010;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//SW.FP
+			memWrite_in<=1; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b010101;
+			funct_in<=6'b000000; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//LW.FP
+			memWrite_in<=0; 
+			memToReg_in<=1;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b010110;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//VST
+			memWrite_in<=1; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b011101;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			//VLD
+			memWrite_in<=0; 
+			memToReg_in<=1;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b011110;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b00;	
+			#10
+			//BEQ
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b100000;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b01;
+			#10
+			//BLT
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b100001;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b10;	
+			#10
+			//JUMP
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b100010;
+			funct_in<=6'b110101; 
+			jmp_in<=1; 
+			branch_in<=2'b00;
+			#10
+			//VSET
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b111;
+			opcode_in<=6'b111111;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+			#10
+			memWrite_in<=0; 
+			memToReg_in<=0;
+			stall_enable<=0;
+			aluControl_in <=3'b100;
+			opcode_in<=6'b000011;
+			funct_in<=6'b110101; 
+			jmp_in<=0; 
+			branch_in<=2'b00;
+		end
+		#30
+		reset <= 1;
 		
-		aluControl_in <=3'b110;
-		#15
-		memToReg_in<=0;
-		#10
-		stall_enable<=0;
-		
-		aluControl_in <=3'b010;
-		#20
-		
-		aluControl_in <=3'b011;
-		#10
-		aluControl_in <=3'b100;
-				
 		
 		
 		

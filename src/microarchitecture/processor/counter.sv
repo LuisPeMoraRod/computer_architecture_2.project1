@@ -1,4 +1,4 @@
-module contador (
+module counter (
     input logic clk,       // Señal de reloj
     input logic reset,     // Señal de reset
     input logic enable,    // Señal de control del contador
