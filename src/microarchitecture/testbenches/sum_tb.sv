@@ -39,7 +39,6 @@ module sum_tb;
         $display("Test Case 2: Input = 0x%h, Sum = %d", bus_in, sum_out);
         assert(sum_out == 16'h0100) else $error("Expected Sum = 0x100");
 
-        // Conclude the test
         #10;
         $finish;
     end

@@ -116,36 +116,18 @@ def get_r_type(instruction: list) -> str:
     opcode = isa[mnemonic]['opcode']
     funct = isa[mnemonic]['funct']
 
-    if (mnemonic == ADD or SUB ):
+    if (mnemonic == VSUMFP):    # vsum_fp
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
-        rt = get_register(instruction[3])
+        rt = get_register(instruction[2])
         shamt = '00000'
-    
-    if (mnemonic == ADDFP or MULFP ):
-        rd = get_register(instruction[1])
-        rs = get_register(instruction[2])
-        rt = get_register(instruction[3])
-        shamt = '00000'
-    
-    if (mnemonic == VADDFP or VMULFP or VSUMFP):
-        rd = get_register(instruction[1])
-        rs = get_register(instruction[2])
-        rt = get_register(instruction[3])
-        shamt = '00000'
-    '''
-    if (mnemonic == SLL or mnemonic == SRL):
-        rd = get_register(instruction[1])
-        rs = get_register(instruction[2])
-        rt = '0000'
-        shamt = to_bin(instruction[3], 5)
 
-    if (mnemonic == JR):
-        rd = '0000'
-        rs = get_register(instruction[1])
-        rt = '0000'
+    else:   # add, sub, add_fp, mul_fp, vadd_fp, vmul_fp 
+        rd = get_register(instruction[1])
+        rs = get_register(instruction[2])
+        rt = get_register(instruction[3])
         shamt = '00000'
-    '''
+
     print("R opcode:", opcode, " rs:", rs, " rt:", rt, " rd:", rd, " shamt:", shamt, " funct:", funct)
     print("R opcode:", len(opcode), " rs:", len(rs), " rt:", len(rt), " rd:", len(rd), " shamt:", len(shamt), " funct:", len(funct))
     return opcode + rs + rt + rd + shamt + funct

@@ -68,6 +68,14 @@ module ALU_vec_tb;
 		// Show fp vector set
 		$display("Result fp vector set: %h", result);
 		$display("Flags: %b", flags);
+
+		opcode = 3'b011;
+		#100;
+
+		// Show fp vector sum
+		$display("Result fp vector sum: %h", result);
+		$display("Flags: %b", flags);
+
 				
 	end
 

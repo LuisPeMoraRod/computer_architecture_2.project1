@@ -8,6 +8,9 @@
 	output reg [63:0] flags
 );
 
+	logic [255:0] result_alu;
+	logic [15:0] sum_out;
+
 	localparam NUM_INSTANCES = 16;	// Total amount of instances 
 	localparam bits_index = 16;		// Index to access to required bits for A and B
 	localparam flags_index = 4; 	// Index to access to required flags bits 
@@ -24,10 +27,14 @@
 				.opcode(opcode), 
 				.flag_scalar(flag_scalar),
 				.instance_num(i),
-				.result(result[15 + bits_index*i : 0 + bits_index*i]),
+				.result(result_alu[15 + bits_index*i : 0 + bits_index*i]),
 				.flags(flags[3 + flags_index*i : 0 + flags_index*i])
 			);
 		end
 	endgenerate
+
+	sum alu_sum(a, sum_out);
+
+	assign result = (opcode == 3'b011) ? {240'b0, sum_out} : result_alu;
 
 endmodule
