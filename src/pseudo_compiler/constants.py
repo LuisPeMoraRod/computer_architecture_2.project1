@@ -33,8 +33,8 @@ START = 'start'
 isa = {
     ADD : {'type': R, 'opcode': '000000', 'funct': '000000'},
     SUB : {'type': R, 'opcode': '000000', 'funct': '000001'},
-    ADDFP : {'type': R, 'opcode': '000000', 'funct': '000100'},
-    MULFP : {'type': R, 'opcode': '000000', 'funct': '000110'},
+    ADDFP : {'type': R, 'opcode': '000100', 'funct': '000100'},
+    MULFP : {'type': R, 'opcode': '000100', 'funct': '000110'},
     VADDFP : {'type': R, 'opcode': '001100', 'funct': '100100'},
     VMULFP : {'type': R, 'opcode': '001100', 'funct': '100110'},
     VSUMFP : {'type': R, 'opcode': '001100', 'funct': '110000'},
