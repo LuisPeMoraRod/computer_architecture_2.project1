@@ -91,7 +91,6 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_tb -section_id AL
 set_global_assignment -name EDA_TEST_BENCH_NAME regfile_vec_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id regfile_vec_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME regfile_vec_tb -section_id regfile_vec_tb
-set_global_assignment -name BOARD "DE1-SoC Board"
 set_global_assignment -name EDA_TEST_BENCH_NAME ALU_vec_aux_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ALU_vec_aux_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ALU_vec_aux_tb -section_id ALU_vec_aux_tb
@@ -130,6 +129,35 @@ set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/stepping_tb.sv -sect
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_location_assignment PIN_AE26 -to display1[0]
+set_location_assignment PIN_AE27 -to display1[1]
+set_location_assignment PIN_AE28 -to display1[2]
+set_location_assignment PIN_AG27 -to display1[3]
+set_location_assignment PIN_AF28 -to display1[4]
+set_location_assignment PIN_AG28 -to display1[5]
+set_location_assignment PIN_AH28 -to display1[6]
+set_location_assignment PIN_AJ29 -to display2[0]
+set_location_assignment PIN_AH29 -to display2[1]
+set_location_assignment PIN_AH30 -to display2[2]
+set_location_assignment PIN_AG30 -to display2[3]
+set_location_assignment PIN_AF29 -to display2[4]
+set_location_assignment PIN_AF30 -to display2[5]
+set_location_assignment PIN_AD27 -to display2[6]
+set_location_assignment PIN_AB23 -to display3[0]
+set_location_assignment PIN_AE29 -to display3[1]
+set_location_assignment PIN_AD29 -to display3[2]
+set_location_assignment PIN_AC28 -to display3[3]
+set_location_assignment PIN_AD30 -to display3[4]
+set_location_assignment PIN_AC29 -to display3[5]
+set_location_assignment PIN_AC30 -to display3[6]
+set_location_assignment PIN_AD26 -to display4[0]
+set_location_assignment PIN_AC27 -to display4[1]
+set_location_assignment PIN_AD25 -to display4[2]
+set_location_assignment PIN_AC25 -to display4[3]
+set_location_assignment PIN_AB28 -to display4[4]
+set_location_assignment PIN_AB25 -to display4[5]
+set_location_assignment PIN_AB22 -to display4[6]
+set_location_assignment PIN_AF14 -to clk_c
 set_global_assignment -name SYSTEMVERILOG_FILE processor/muxOut.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/stepping_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/muxClock.sv
@@ -167,4 +195,22 @@ set_global_assignment -name SYSTEMVERILOG_FILE processor/counter.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/metrics/PMC_unit.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/PMC_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE processor/displayconverter.sv
+set_location_assignment PIN_AA14 -to clk_b
+set_location_assignment PIN_AB12 -to debug
+set_location_assignment PIN_AA24 -to display5[0]
+set_location_assignment PIN_Y23 -to display5[1]
+set_location_assignment PIN_Y24 -to display5[2]
+set_location_assignment PIN_W22 -to display5[3]
+set_location_assignment PIN_W24 -to display5[4]
+set_location_assignment PIN_V23 -to display5[5]
+set_location_assignment PIN_W25 -to display5[6]
+set_location_assignment PIN_V25 -to display6[0]
+set_location_assignment PIN_AA28 -to display6[1]
+set_location_assignment PIN_Y27 -to display6[2]
+set_location_assignment PIN_AB27 -to display6[3]
+set_location_assignment PIN_AB26 -to display6[4]
+set_location_assignment PIN_AA26 -to display6[5]
+set_location_assignment PIN_AA25 -to display6[6]
+set_location_assignment PIN_AA15 -to reset
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name TIMING_ANALYZER_MULTICORNER_ANALYSIS ON
