@@ -33,13 +33,13 @@ module vector_load_store_unit
 	assign aligned = (shamt == 0);
 	
 	
-	assign ip_address = (count) ? address[19:5] + 14'd1 : address[19:5];	// align to 256 bits
+	assign ip_address = (count) ? address[18:5] + 14'd1 : address[18:5];	// align to 256 bits
 	assign wr_data_part1 = vectorDataIn << shamt*8;
 	assign wr_data_part2 = vectorDataIn >> 256 - shamt*8;
 
 	assign rd_data_part1_temp = readData >> prev_shamt*8;
 	assign rd_data_part2_temp = readData << 256 - prev_shamt*8;
-	assign rd_data_part2 = readData >> 256 - prev_shamt*8;
+	assign rd_data_part2 = rd_data_part2_temp >> 256 - prev_shamt*8;
 
 
 	assign wren = memWriteM;
@@ -49,7 +49,7 @@ module vector_load_store_unit
 	always_ff @ (posedge clk) 
 	begin
 		if (reset) begin
-			count <= 4'b0;
+			count <= 2'b0;
 		end
 		else 
 		begin	

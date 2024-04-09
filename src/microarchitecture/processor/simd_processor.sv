@@ -8,12 +8,12 @@ module simd_processor
 	input logic clk, reset,
 	output logic [31:0] pcF,
 	input logic [31:0] instrF,
-	output logic memwriteM, src_sel,
-	output logic [31:0] aluoutM, 
-	output logic [31:0] writedataM,
-	input logic [31:0] readdataM,
-	output logic [255:0] ValuoutM,
-	input logic [255:0] Vmemout
+
+	output logic [31:0] address_RAM,
+	output logic [31:0] byteena_RAM,
+	input logic [255:0] readData_RAM,
+	output logic [255:0] writeData_RAM,
+	output logic rden_RAM, wren_RAM
 );
 
 	logic [5:0] opD, functD;
@@ -26,6 +26,7 @@ module simd_processor
 	logic jumpD; 
 	logic [1:0] branchD;
 	logic [31:0] srca2D, srcb2D;
+	logic memwriteM, src_sel;
 	
 	control c
 	(
@@ -46,16 +47,20 @@ module simd_processor
 	datapath dp
 	(
 		clk, reset, 
-		memtoregE, memdataM, src_sel, memtoregM, memtoregW, 
+		memtoregE, memdataM, src_sel, memtoregM, memtoregW, memwriteM,
 		pcsrcD, branchD,
 		alusrcE, regdstE, scalarE,
 		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 		jumpD, alucontrolE,
 		pcF, instrF,
-		aluoutM, writedataM, readdataM,
 		opD, functD, flushE,
 		srca2D, srcb2D,
-		ValuoutM, Vmemout
+
+		address_RAM,
+		byteena_RAM,
+		readData_RAM,
+		writeData_RAM,
+		rden_RAM, wren_RAM
 	);
 
 endmodule
