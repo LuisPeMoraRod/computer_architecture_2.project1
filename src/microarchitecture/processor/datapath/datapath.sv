@@ -3,7 +3,7 @@
 module datapath
 (
 	input logic clk, reset,
-	input logic memtoregE, memdataM, memSrcM, memtoRegM, memtoRegW, memWriteM,
+	input logic memtoregE, memdataM, memSrcM, memtoRegM, memtoRegW, memwriteE, memWriteM,
 	input logic pcsrcD, 
 	input logic [1:0] branchD,
 	input logic alusrcE, regdstE, scalarE,
@@ -42,7 +42,7 @@ module datapath
 	logic [3:0] flags;
 	logic [255:0] VsrcaD, VsrcaE, Vsrca2E;
 	logic [255:0] VsrcbD, VsrcbE, Vsrcb2E;
-	logic [255:0] VresultW, ValuoutE, extVector, ValuoutW, VreadDataM, VreadDataW;
+	logic [255:0] VresultE, VresultW, ValuoutE, extVector, ValuoutW, VreadDataM, VreadDataW;
 	logic [1:0] VforwardaE, VforwardbE;
 	logic [63:0] Vflags;
 	
@@ -58,7 +58,7 @@ module datapath
 		rsD, rtD, rsE, rtE, 
 		writeregE, writeregM, writeregW,
 		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
-		memtoregE, memtoregM, busy,
+		memtoregE, memtoRegM, busy,
 		branchD,
 		forwardaD, forwardbD, 
 		forwardaE, forwardbE, VforwardaE, VforwardbE,
@@ -123,10 +123,9 @@ module datapath
 	mux3 #(256) Vforwardaemux (VsrcaE, VresultW, ValuoutM, VforwardaE, Vsrca2E);
 	mux3 #(256) Vforwardbemux (VsrcbE, VresultW, ValuoutM, VforwardbE, Vsrcb2E);
 
-	mux2 #(256) SWmux (VresultE, VforwardbE, memWriteE, ValuoutE);
-	
 	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, srcb3E, alucontrolE, scalarE, VresultE, Vflags);
-	
+
+	mux2 #(256) SWmux ( VresultE, Vsrcb2E, memwriteE, ValuoutE);
 	
 	// Memory stage
 	reg_ren #(32) r1M(clk, reset, ~stallM, srcb2E, writedataM);

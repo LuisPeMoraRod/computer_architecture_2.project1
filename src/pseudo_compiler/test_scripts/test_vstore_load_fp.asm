@@ -1,4 +1,3 @@
-        addi $t1, $zero, 8
-        vset_fp $v1, 4
+        addi $t1, $zero, 32
+        vset_fp $v1, 15
         sw_fp $v1, $t1, 0
-        ld_fp $v2, $t1, 0

@@ -26,7 +26,7 @@ module simd_processor
 	logic jumpD; 
 	logic [1:0] branchD;
 	logic [31:0] srca2D, srcb2D;
-	logic memwriteM, memsrcM;
+	logic memwriteE, memwriteM, memsrcM;
 	
 	control c
 	(
@@ -38,7 +38,7 @@ module simd_processor
 		pcsrcD, alusrcE, scalarE,
 		alucontrolE,
 		regdstE, 
-		memwriteM, memdataM, memsrcM,
+		memwriteE, memwriteM, memdataM, memsrcM,
 		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 		memtoregE, memtoregM, memtoregW
 	);
@@ -46,7 +46,7 @@ module simd_processor
 	datapath dp
 	(
 		clk, reset, 
-		memtoregE, memdataM, memsrcM, memtoregM, memtoregW, memwriteM,
+		memtoregE, memdataM, memsrcM, memtoregM, memtoregW, memwriteE, memwriteM,
 		pcsrcD, branchD,
 		alusrcE, regdstE, scalarE,
 		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,

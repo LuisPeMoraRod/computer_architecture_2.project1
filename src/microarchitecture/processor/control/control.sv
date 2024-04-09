@@ -12,7 +12,7 @@ module control
 	output logic pcsrcD, alusrcE, scalarE,
 	output logic [2:0] alucontrolE,
 	output logic regdstE,
-	output logic memwriteM, memdataM, memsrcM,
+	output logic memwriteE, memwriteM, memdataM, memsrcM,
 	output logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 	output logic memtoregE, memtoregM, memtoregW
 );
@@ -22,7 +22,7 @@ module control
 	logic memtoregD, memwriteD, alusrcD, scalarD, 
 			regdstD, regwriteD, VregwriteD, memdataD;
 	logic [2:0] alucontrolD;
-	logic memwriteE, memdataE, memsrcD, memsrcE;
+	logic memdataE, memsrcD, memsrcE;
 	logic VregwriteE, VmemtoregM;
 	
 	
