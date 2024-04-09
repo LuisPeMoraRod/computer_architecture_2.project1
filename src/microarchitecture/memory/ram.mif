@@ -16,12 +16,14 @@
 -- Quartus Prime generated Memory Initialization File (.mif)
 
 WIDTH = 16;
-DEPTH = 196608;
+DEPTH = 441088;
 	
 ADDRESS_RADIX = HEX;
 DATA_RADIX = HEX;
 	
 CONTENT BEGIN
-    [00000..1FFFF] : 0000;
-    [20000..2FFFF] : FFFF;
+    [00000..0004F] : 0000;    -- constants
+    [00050..35DA3] : 0000;    -- input audio
+    [35DA4..6BAF7] : 0000;    -- output audio
+    [6BAF8..6BAFF] : FFFF;    -- space for stack
 END;

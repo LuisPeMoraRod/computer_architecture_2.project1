@@ -20,7 +20,7 @@ module simd_processor
 	logic regdstE, alusrcE, scalarE,
 			pcsrcD, memdataM,
 			memtoregE, memtoregM, memtoregW,
-			regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW;
+			regwriteE, regwriteM, regwriteW, VregwriteW;
 	logic [2:0] alucontrolE;
 	logic flushE;
 	logic jumpD; 
@@ -39,7 +39,7 @@ module simd_processor
 		alucontrolE,
 		regdstE, 
 		memwriteM, memdataM, src_sel,
-		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+		regwriteE, regwriteM, regwriteW, VregwriteW,
 		memtoregE, memtoregM, memtoregW
 	);
 	
@@ -49,7 +49,7 @@ module simd_processor
 		memtoregE, memdataM, src_sel, memtoregM, memtoregW, 
 		pcsrcD, branchD,
 		alusrcE, regdstE, scalarE,
-		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+		regwriteE, regwriteM, regwriteW, VregwriteW,
 		jumpD, alucontrolE,
 		pcF, instrF,
 		aluoutM, writedataM, readdataM,

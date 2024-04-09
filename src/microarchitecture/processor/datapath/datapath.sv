@@ -7,7 +7,7 @@ module datapath
 	input logic pcsrcD, 
 	input logic [1:0] branchD,
 	input logic alusrcE, regdstE, scalarE,
-	input logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+	input logic regwriteE, regwriteM, regwriteW, VregwriteW,
 	input logic jumpD,
 	input logic [2:0] alucontrolE,
 	output logic [31:0] pcF,
@@ -48,13 +48,11 @@ module datapath
 	// hazard detection
 	hazard h
 	(
-		rsD, rtD, rsE, rtE, 
-		writeregE, writeregM, writeregW,
-		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
-		memtoregE, memtoregM, 
-		branchD,
-		forwardaD, forwardbD, 
-		forwardaE, forwardbE, VforwardaE, VforwardbE,
+		rsD, rtD, rsE, rtE, writeregE, writeregM,
+		writeregW,regwriteE, regwriteM, regwriteW,
+		memtoregE, memtoregM, branchD,
+		forwardaD, forwardbD, forwardaE,
+		forwardbE,
 		stallF, stallD, flushE
 	);
 	
@@ -67,7 +65,7 @@ module datapath
 	regfile rf(clk, reset, regwriteW, rsD, rtD, writeregW, resultW, srcaD, srcbD);
 	
 	// Vector register file 
-	regfile_vec rf_v(clk, reset, VregwriteW, rsD, rtD, writeregW, VresultW, VsrcaD, VsrcbD);
+	regfile_vec rf_v(clk, VregwriteW, rsD[2:0], rtD[2:0], writeregW[2:0], VresultW, VsrcaD, VsrcbD);
 	
 	
 	// Fetch stage
@@ -116,7 +114,7 @@ module datapath
 	mux3 #(256) Vforwardaemux (VsrcaE, VresultW, ValuoutM, VforwardaE, Vsrca2E);
 	mux3 #(256) Vforwardbemux (VsrcbE, VresultW, ValuoutM, VforwardbE, Vsrcb2E);
 	
-	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, srcb3E, alucontrolE, scalarE, ValuoutE, Vflags);
+	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, alucontrolE, scalarE, ValuoutE, Vflags);
 	
 	
 	// Memory stage

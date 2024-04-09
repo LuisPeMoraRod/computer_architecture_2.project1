@@ -1,78 +1,38 @@
 module ALU_vec_aux (
-	input [15:0] data_a,		// first operand
-	input [15:0] data_b,		// second operand
-	input [15:0] data_c,		// used to set value
-	input [2:0] opcode,			// code for operation
-	input flag_scalar,			// flag that indicates if its vectorial or scalar operation
-	input int instance_num,		// ALU ID
-	output reg [15:0] result,	
-	output reg [3:0] flags		//Carry(0), Zero(1), Negative(2), Overflow(3)
+	input [15:0] a,
+	input [15:0] b,
+	input [2:0] opcode,
+	input flag_scalar,
+	input int instance_num,
+	output reg [15:0] result,
+	output reg [3:0] flags
 );
 
-	// Internal signals
-	logic [15:0] high, mid, low, a_mult, b_mult, a_comp, b_comp, result_temp, result_comp;
-	logic [16:0] extended_result;
+	// Variables internas para los calculos
+	reg [13:0] mult_int_result;    // 14 bits para el resultado entero de la multiplicacion
+	reg [15:0] mult_frac_result;   // 15 bits para el resultado fraccionario de la multiplicacion
 
-	// two-complement of the operands
-	two_complement #(.N(16)) tc_a (
-		.data_in(data_a),
-		.data_out(a_comp)
-	);
-
-	two_complement #(.N(16)) tc_b (
-		.data_in(data_b),
-		.data_out(b_comp)
-	);
-
+	// Seleccion de la operacion
 	always @* begin
-		// multiplication partial result signals
-		high = 16'b0;
-		mid = 16'b0;
-		low = 16'b0;
-
-		// two-complement if signed bit in 1
-		a_mult = data_a[15] ? a_comp : data_a;
-		b_mult = data_b[15] ? b_comp : data_b;
+		mult_int_result = 14'b0;    
+		mult_frac_result = 16'b0;
 
 		if ( (flag_scalar == 1'b1 && instance_num == 0) || (flag_scalar == 1'b0) ) begin
 			case (opcode)
-				3'b000: // FP multiplication
+				3'b000: // Suma 
+					result = a + b;
+
+				3'b001: // Resta
+					result = a - b;
+
+				3'b010: // Multiplicacion
 					begin
-						high = a_mult[14:8] * b_mult[14:8]; //multiply integer parts
-						mid = (a_mult[14:8] * b_mult[7:0]) + (b_mult[14:8] * a_mult[7:0]); // (a integer * b decimal) + (b integer * a decimal)
-						low = a_mult[7:0] * b_mult[7:0]; //multiply decimal part
-
-						result_temp = (high << 8) + mid + (low >> 8);
-						result_comp = ~result_temp + 1'b1; // two-complement of the result
-						
-						result = (data_a[15] ^ data_b[15]) ? result_comp : result_temp; //set sign 
-
-						flags[0] = 1'bx;	//Carry flag
-						flags[3] = (high > 16'hFF); 	//Overflow flag
+						mult_int_result = a[14:8] * b[14:8];	// Multiplicacion parte entera
+						mult_frac_result = a[7:0] * b[7:0];  	// Multiplicacion parte fraccionaria
+					
+						result = {mult_int_result[6:0], mult_frac_result[15:8]};
 					end
-
-				3'b001: begin // FP substraction
-					extended_result = {1'b0, data_a} + {1'b0, b_comp};
-					result = extended_result[15:0];
-
-					flags[0] = extended_result[16]; 	// Carry flag for add
-					flags[3] = (data_a[15] ^ result[15]) && ~(data_a[15] ^ data_b[15] ^ opcode[0]); // Overflow flag for add
-				end
-
-				3'b010: begin // FP add
-					extended_result = {1'b0, data_a} + {1'b0, data_b};
-					result = extended_result[15:0];
-
-					flags[0] = extended_result[16]; 	// Carry flag for add
-					flags[3] = (data_a[15] ^ result[15]) && ~(data_a[15] ^ data_b[15] ^ opcode[0]); // Overflow flag for add
-				end
-
-				3'b111: begin // FP set
-					result = data_c;
-					flags[0] = 1'b0;
-					flags[3] = 1'b0;
-				end
-
+					
 				default: // Operacion no valida
 					result = 16'b0;  
 			
@@ -86,15 +46,10 @@ module ALU_vec_aux (
 
 	// Flags
 	always @* begin
-		flags[1] = (result == 16'b0);			// Zero flag
-		flags[2] = result[15]; 					// Negative flag
+		flags[0] = (a[15] == 1'b0) && (b[15] == 1'b0) && (result[15] == 1'b1);	// Carry
+		flags[1] = (result == 16'b0);		// Cero
+		flags[2] = (result[15] == 1'b1);	// Negativo
+		flags[3] = (result > 16'h7FFF);	// Overflow
 	end
 
 	endmodule
-
-module two_complement #(parameter N = 16)(
-	input [N-1:0] data_in,
-	output [N-1:0] data_out
-);
-	assign data_out = ~data_in + 1'b1;
-endmodule

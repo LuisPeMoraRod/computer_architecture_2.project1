@@ -5,6 +5,7 @@ module top
 (
 	input logic clk, reset,
 	output logic [31:0] readdata2
+	
 );
 
 	logic [31:0] writedata, dataadr;

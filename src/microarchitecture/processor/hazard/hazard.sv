@@ -3,11 +3,11 @@ module hazard
 (
 	input logic [4:0] rsD, rtD, rsE, rtE,
 	input logic [4:0] writeregE, writeregM, writeregW,
-	input logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+	input logic regwriteE, regwriteM, regwriteW,
 	input logic memtoregE, memtoregM, 
 	input logic [1:0] branchD,
 	output logic forwardaD, forwardbD,
-	output logic [1:0] forwardaE, forwardbE, VforwardaE, VforwardbE,
+	output logic [1:0] forwardaE, forwardbE,
 	output logic stallF, stallD, flushE
 );
 
@@ -21,41 +21,18 @@ module hazard
 	// forwarding sources to E stage (ALU)
 	always_comb
 	begin
-		forwardaE = 2'b00; 
-		forwardbE = 2'b00;
-
-		VforwardaE = 2'b00; 
-		VforwardbE = 2'b00; 
-		
-		if (rsE != 0) begin
-			if (rsE == writeregM && regwriteM) begin
-				forwardaE = 2'b10;
-			end else if (rsE == writeregW && regwriteW) begin
-				forwardaE = 2'b01;
-			end
-
-			if (rsE == writeregM && VregwriteM) begin
-				VforwardaE = 2'b10;
-			end else if (rsE == writeregW && VregwriteW) begin
-				VforwardaE = 2'b01;
-			end
-		end
-		
-		if (rtE != 0) begin
-			if (rtE == writeregM && regwriteM) begin
-				forwardbE = 2'b10;
-			end else if (rtE == writeregW && regwriteW) begin
-				forwardbE = 2'b01;
-			end
-
-			if (rtE == writeregM && VregwriteM) begin
-				VforwardbE = 2'b10;
-			end else if (rtE == writeregW && VregwriteW) begin
-				VforwardbE = 2'b01;
-			end
-		end
+		forwardaE = 2'b00; forwardbE = 2'b00;
+		if (rsE != 0)
+		if (rsE == writeregM & regwriteM)
+			forwardaE = 2'b10;
+		else if (rsE == writeregW & regwriteW)
+			forwardaE = 2'b01;
+		if (rtE != 0)
+		if (rtE == writeregM & regwriteM)
+			forwardbE = 2'b10;
+		else if (rtE == writeregW & regwriteW)
+			forwardbE = 2'b01;
 	end
-
 	
 	
 	// stalls

@@ -13,7 +13,7 @@ module control
 	output logic [2:0] alucontrolE,
 	output logic regdstE,
 	output logic memwriteM, memdataM, memsrcM,
-	output logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+	output logic regwriteE, regwriteM, regwriteW, VregwriteW,
 	output logic memtoregE, memtoregM, memtoregW
 );
 
@@ -23,7 +23,7 @@ module control
 			regdstD, regwriteD, VregwriteD, memdataD;
 	logic [2:0] alucontrolD;
 	logic memwriteE, memdataE, memsrcD, memsrcE;
-	logic VregwriteE, VmemtoregM;
+	logic VregwriteE, VmemtoregM, VregwriteM;
 	
 	
 	maindec md

@@ -2,16 +2,14 @@ module regfile_vec_tb;
 
     // Parametros
     reg clk;
-    reg rst;
     reg vwe3;
-    reg [4:0] vra1, vra2, vwa3;
+    reg [2:0] vra1, vra2, vwa3;
     reg [255:0] vwd3;
     wire [255:0] vrd1, vrd2;
 
     // Instancia del modulo regfile_vec
     regfile_vec uut (
         .clk(clk),
-        .rst(rst),
         .vwe3(vwe3),
         .vra1(vra1),
         .vra2(vra2),
@@ -25,20 +23,15 @@ module regfile_vec_tb;
 
     initial begin
         clk = 0;
-        rst = 1;
-        #10;
-        rst = 0;
-        vwe3 = 0;
-        vra1 = 32'h10; // 0x10 => vrf0
-        vra2 = 32'h11; // 0x11 => vrf1
-        vwa3 = 32'h10;
-        vwd3 = {32{8'hAA}};
-        #10;
         vwe3 = 1;
+        vra1 = 1;
+        vra2 = 2;
+        vwa3 = 2;
+        vwd3 = 256'h123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef;
+        
         #10;
         vwe3 = 0;
-        #10
-        $finish;
+        #10;
     end
 
     // Monitoreo de las salidas

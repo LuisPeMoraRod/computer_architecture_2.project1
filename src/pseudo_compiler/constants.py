@@ -9,32 +9,32 @@ IMM_SIZE = 16
 ADDR_SIZE = 26
 
 #mnemonics
-ADDI = 'addi'
-ADD = 'add'
-SUB = 'sub'
-BEQ = 'beq'
-BLT = 'blt'
-J = 'jump'
-SW = 'sw'
-LW = 'lw'
-ADDFP = 'add_fp'
+ADD = 'suma'
+SUB = 'reste'
+ADDFP = 'suma_fp'
 MULFP = 'mul_fp'
-SWFP = 'sw_fp'
-LWFP = 'ld_fp'
-VADDFP = 'vadd_fp'
-VMULFP = 'vmul_fp'
-VSUMFP = 'vsum_fp'
-VSETFP = 'vset_fp'
-VST = 'vst_fp'
-VLD = 'vld_fp'
-END = 'end'
-START = 'start'
+VADDFP = 'v_suma_fp'
+VMULFP = 'v_mul_fp'
+VSUMFP = 'v_sumhor_fp'
+ADDI = 'suma_in'
+BEQ = 'salte_ig'
+BLT = 'salte_me'
+SW = 'guarde'
+LW = 'cargue'
+SWFP = 'guarde_fp'
+LWFP = 'cargue_fp'
+VSETFP = 'set_fp'
+VST = 'v_guarde_fp'
+VLD = 'v_cargue_fp'
+J = 'salte'
+END = 'fin'
+START = 'inicie'
 
 isa = {
     ADD : {'type': R, 'opcode': '000000', 'funct': '000000'},
     SUB : {'type': R, 'opcode': '000000', 'funct': '000001'},
-    ADDFP : {'type': R, 'opcode': '000100', 'funct': '000100'},
-    MULFP : {'type': R, 'opcode': '000100', 'funct': '000110'},
+    ADDFP : {'type': R, 'opcode': '000000', 'funct': '000100'},
+    MULFP : {'type': R, 'opcode': '000000', 'funct': '000110'},
     VADDFP : {'type': R, 'opcode': '001100', 'funct': '100100'},
     VMULFP : {'type': R, 'opcode': '001100', 'funct': '100110'},
     VSUMFP : {'type': R, 'opcode': '001100', 'funct': '110000'},
@@ -56,21 +56,21 @@ isa = {
 #Registers names
 registers = {
     '$zero': '00000',
-    '$t0': '00001', 
-    '$t1': '00010', 
-    '$t2': '00011', 
-    '$t3': '00100', 
-    '$t4': '00101', 
-    '$t5': '00110', 
-    '$t6': '00111', 
-    '$t7': '01000', 
-    '$t8': '01001', 
-    '$t9': '01010', 
-    '$t10': '01011', 
-    '$t11': '01100', 
-    '$t12': '01101', 
-    '$t13': '01110', 
-    '$t14': '01111',
+    '$a0': '00001', 
+    '$a1': '00010', 
+    '$sp': '00011', 
+    '$cbh': '00100', 
+    '$cbt': '00101', 
+    '$b0': '00110', 
+    '$b1': '00111', 
+    '$b2': '01000', 
+    '$b3': '01001', 
+    '$b4': '01010', 
+    '$b5': '01011', 
+    '$b6': '01100', 
+    '$b7': '01101', 
+    '$b8': '01110', 
+    '$b9': '01111',
     '$v0': '10000', 
     '$v1': '10001', 
     '$v2': '10010', 

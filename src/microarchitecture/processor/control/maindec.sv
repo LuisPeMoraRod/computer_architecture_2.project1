@@ -11,7 +11,7 @@ module maindec
 );
 
 	logic [13:0] controls;
-	assign {regWrite, VregWrite, memtoReg, memWrite, memData, memSrc,   ALUSrc, scalar, regDst,   branch, jump, aluop} = controls;
+	assign {regWrite, VregWrite,   memtoReg, memWrite, memData, memSrc,   ALUSrc, scalar, regDst,   branch, jump, aluop} = controls;
 	
 	always_comb
 		case(op)
@@ -28,7 +28,7 @@ module maindec
 			6'b100000: controls = 14'b_00_0000_000_01_0_00; // beq
 			6'b100001: controls = 14'b_00_0000_000_10_0_00; // blt
 			6'b100010: controls = 14'b_00_0000_000_00_1_00; // j
-			6'b111111: controls = 14'b_01_0000_100_00_0_01; // vset.fp
+			6'b111111: controls = 14'b_01_0000_100_00_0_10; // vset.fp
 			6'b110010: controls = 14'b_00_0000_000_00_0_00; // start
 			6'b110001: controls = 14'b_00_0000_000_00_0_00; // close
 			  default: controls = 14'b_00_0000_000_00_0_00; // ??

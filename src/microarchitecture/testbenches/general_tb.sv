@@ -6,21 +6,18 @@ module general_tb();
 	
 	// instantiate device to be tested
 	top dut(clk, reset, readdata2);
-
-	// Clock generation
-    initial begin
-        clk = 0;
-        forever #10 clk = !clk; // 50MHz clock
-    end
 	
 	// initialize test
 	initial
 	begin
 		reset <= 1; # 22; reset <= 0;
-		# 1000;
-		$finish;
 	end
 	
+	// generate clock to sequence tests
+	always
+	begin
+		clk <= 1; # 5; clk <= 0; # 5;
+	end
 	
 	
 endmodule
