@@ -37,7 +37,7 @@ module control
 		aluopD
 	);
 	
-	aludec ad(opD, functD, aluopD, alucontrolD);
+	aludec ad(functD, aluopD, alucontrolD);
 	
 	branch_control _bc (srca2D, srcb2D, branchD, pcsrcD);
 	

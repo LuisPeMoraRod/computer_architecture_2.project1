@@ -17,8 +17,6 @@ module general_tb();
 	initial
 	begin
 		reset <= 1; # 22; reset <= 0;
-		# 1000;
-		$finish;
 	end
 	
 	
