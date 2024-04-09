@@ -29,6 +29,7 @@ def convert_Q78_toHex(signal):
 
 # Function to print the signal values tabulated
 def print_data(time, signal, signal_q78, signal_Hex):
+    print("\n*** INPUT SIGNAL ***\n")
     print("Time (s) \t Signal Data \t\t Q7.8 Data \t\t Hex Data")
     for t, value, value_Q78, value_Q78_toHex in zip(time, signal, signal_q78, signal_Hex):
         hex_value = float_to_q78_hex(value_Q78_toHex)
@@ -42,8 +43,8 @@ def plot_signal(x_signal, y_signal):
     plt.show()
 
 # Generate sine wave
-period = 1
-samples = 100
+period = 5
+samples = 39200 * 5
 time = np.linspace(0, period, samples, endpoint=False)
 frequency = 1
 sine_wave = create_sine_wave(time, frequency)
@@ -64,14 +65,38 @@ plot_signal(time, sine_wave)
         COEFFICIENT GENERATION
 """""""""""""""""""""""""""""""""""
 
+# Function to generate the filter coefficients
+#   frequency = filter cutoff frequency
+#   filter_order = filter order (number of coefficients)    
+def create_coefficients(frequency, filter_order):
+    filter_coefficients = firwin(filter_order + 1, frequency)
+    max_abs_coefficient = max(abs(filter_coefficients))
+    normalized_coefficients = filter_coefficients / max_abs_coefficient
+
+    if max(abs(normalized_coefficients)) > 1:
+        normalized_coefficients /= max(abs(normalized_coefficients))
+
+    normalized_coefficients = np.round(normalized_coefficients, 8)
+
+    return normalized_coefficients
+
+# Function to print the coefficients values tabulated
+def print_data(signal, signal_q78, signal_Hex):
+    print("\n*** COEFFICIENTS ***\n")
+    print("Coefficients Data \t Q7.8 Data \t\t Hex Data")
+    for value, value_Q78, value_Q78_toHex in zip(signal, signal_q78, signal_Hex):
+        hex_value = float_to_q78_hex(value_Q78_toHex)
+        print(f"{value:.8f} \t\t {value_Q78:.8f} \t\t {hex_value}")
+
 # Generate coefficients
 frequency = 0.1
-filter_order = 11
-filter_coefficients = firwin(filter_order + 1, frequency)
-print("\n\nCoefficients: \n", filter_coefficients)
+filter_order = 31
 
-coefficients_q78_Hex = convert_Q78_toHex(filter_coefficients)
+coefficients = create_coefficients(frequency, filter_order)
+coefficients_q78 = convert_toQ78(coefficients)
+coefficients_q78_Hex = convert_Q78_toHex(coefficients_q78)
 
+print_data(coefficients, coefficients_q78, coefficients_q78_Hex)
 
 
 """""""""""""""""""""""""""""""""""
@@ -93,21 +118,33 @@ def create_mif_file(depth, width, sine_q78_Hex, coefficients_q78_Hex):
         mif_file.write("CONTENT BEGIN\n")
         
         pos = 0
+        hex_values_concatenated = "" 
+
         # Write the signal data in hexadecimal format
         for address, value_Q78_toHex in enumerate(sine_q78_Hex):
             hex_value = float_to_q78_hex(value_Q78_toHex)
-            mif_file.write(f"\t{address} : {hex_value};\n")
-            pos = address
+            hex_values_concatenated += hex_value  
+            
+            if len(hex_values_concatenated) == 64:
+                mif_file.write(f"\t{pos} : {hex_values_concatenated};\n")
+                hex_values_concatenated = "" 
+                pos += 1
+        
+        hex_values_concatenated = "" 
         
         # Write the coefficients data
         for value_Q78_Hex in coefficients_q78_Hex:
-            pos += 1
             hex_value = float_to_q78_hex(value_Q78_Hex)
-            mif_file.write(f"\t{pos} : {hex_value};\n")
+            hex_values_concatenated += hex_value  
+
+            if len(hex_values_concatenated) == 64:
+                mif_file.write(f"\t{pos} : {hex_values_concatenated};\n")
+                hex_values_concatenated = "" 
+                pos += 1
 
         # Initialize remaining memory locations with zeros
-        for address in range(pos + 1, depth):
-            mif_file.write(f"\t{address} : {'0000'};\n")        
+        for address in range(pos, depth):
+            mif_file.write(f"\t{address} : {'0'*64};\n")        
 
         # End the content of the .mif file
         mif_file.write("END;")
@@ -115,7 +152,11 @@ def create_mif_file(depth, width, sine_q78_Hex, coefficients_q78_Hex):
     print("\nThe .mif file was created successfully.\n")
 
 # Create .mif file
-depth = 12287  
-width = 16  
+depth = 12288  
+width = 256
+
 create_mif_file(depth, width, sine_q78_Hex, coefficients_q78_Hex)
 
+# LINE 0 - 12249        : AUDIO FILE
+# LINE 12250 - 12251    : COEFFICIENTS
+# LINE 12252 - 12287    : EMPY SPACE
