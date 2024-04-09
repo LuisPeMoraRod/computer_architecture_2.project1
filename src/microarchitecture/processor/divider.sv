@@ -1,40 +1,30 @@
-module divider(
-    input logic signed [31:0] dividend,
-    input logic signed [31:0] divisor,
-    output logic signed [15:0] result // Q7.8 format reduced to 16 bits
+module divider (
+    input logic [31:0] numerator,  // Numerador de 32 bits
+    input logic [31:0] denominator,  // Denominador de 32 bits
+	 output logic [15:0] result_q78
+    
 );
 
-	logic signed [7:0] quotient;
-	logic signed [31:0] remainder;
-	logic signed [31:0] dividend_reg;
-	logic signed [31:0] divisor_reg;
+    logic [39:0] dividend;
+    logic [31:0] div_result; // Cociente de la división
+	 logic [6:0] truncated_quotient;  // Cociente truncado a 7 bits
+    logic [7:0] remainder;  // Resto de 8 bits
 
-	always @* begin
-		 // Copiar dividend y divisor a registros
-		 dividend_reg = dividend;
-		 divisor_reg = divisor;
+    // Concatenamos el numerador con 8 bits más para realizar la división
+    assign dividend = {8'b0, numerator};
 
-		 // Realizar la división
-		 if (divisor_reg == 0) begin
-			  // Divisor es cero, resultado especial
-			  result = 16'b0; // Todos los bits a cero
-		 end else begin
-			  // Inicializar el cociente y el residuo
-			  quotient = 0;
-			  remainder = dividend_reg;
-
-			  // Realizar la división mediante resta repetida
-			  for (int i = 0; i < 8; i++) begin
-					remainder = remainder - divisor_reg;
-					if (remainder[31] == 0) 
-						 quotient[7 - i] = 1; // Bit del cociente en posición adecuada
-					else
-						 remainder = remainder + divisor_reg; // Restaurar el residuo
-			  end
-
-			  // Ajustar el resultado a Q7.8 format
-			  result = {quotient[7:0], remainder[30:23]}; // Parte entera en bits [15:8], parte fraccionaria en bits [7:0]
-		 end
-	end
+    // Realizamos la división
+    always @* begin
+        if (denominator == 0) begin
+            truncated_quotient = 8'b0; // Si el denominador es 0, el cociente truncado es 0
+            remainder = 8'b0; // El resto también es 0
+        end else begin
+            div_result = dividend / denominator;
+            remainder = dividend % denominator;
+            truncated_quotient = div_result[6:0]; // Truncamos el cociente a 7 bits
+            result_q78 = {1'b0, truncated_quotient, remainder};
+				
+        end
+    end
 
 endmodule

@@ -10,13 +10,11 @@ module PMC_tb();
 	 logic [1:0] branch_in; // señal desde unidad de control
 	 
 	 
-	 logic [31:0] stall_count, CPI_numerator, CPI_denominator; // Out stall_count
-    logic [15:0] cycles_per_instruction; // Out instr_cycle_count
-    logic [31:0] arith_count; // Out arith_count
-	 logic [31:0] mem_access_count;  // Out mem_access_Count
-	 logic [31:0] mem_read_count, mem_write_count;
-	 logic [31:0] ADD_count, SUB_count, ADDI_count, ADD_FP_count, MUL_FP_count, VADD_FP_count, VMUL_FP_count, VSUM_FP_count, VSET_FP_count, SW_count, LW_count, SW_FP_count, LW_FP_count, VST_count, VLD_count, BEQ_count, BLT_count, J_count;
-	
+	 logic [255:0] stall_count; // Out stall_count
+    logic [255:0] cycles_per_instruction_q78; // Out instr_cycle_count
+    logic [255:0] arith_count; // Out arith_count
+	 logic [255:0] mem_access_count;  // Out mem_access_Count
+	 
 	// instantiate device to be tested
 	PMC_unit dut(
 	 clk, reset,
@@ -26,13 +24,11 @@ module PMC_tb();
 	 opcode_in, funct_in, // señales desde al menos execute en adelante
 	 jmp_in, // señal desde unidad de control
 	 branch_in,
-	 stall_count, CPI_numerator, CPI_denominator,// Out stall_count
-    cycles_per_instruction, // Out instr_cycle_count
+	 stall_count,// Out stall_count
+    cycles_per_instruction_q78, // Out instr_cycle_count
     arith_count, // Out arith_count
-	 mem_access_count,  // Out mem_access_Count
-	 mem_read_count, mem_write_count,
-	 ADD_count, SUB_count, ADDI_count, ADD_FP_count, MUL_FP_count, VADD_FP_count, VMUL_FP_count, VSUM_FP_count, VSET_FP_count, SW_count, LW_count, SW_FP_count, LW_FP_count, VST_count, VLD_count, BEQ_count, BLT_count, J_count
-
+	 mem_access_count // Out mem_access_Count
+	 
 	);
 	// initialize test
 	initial

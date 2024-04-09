@@ -7,20 +7,22 @@ module PMC_unit (
 	 input logic [5:0] opcode_in, funct_in, // señales desde al menos execute en adelante
 	 input logic jmp_in, // señal desde unidad de control
 	 input logic [1:0] branch_in, // señal desde unidad de control
-	 output logic [31:0] stall_count, CPI_numerator, CPI_denominator, // Out stall_count
-    output logic [15:0] cycles_per_instruction, // Out instr_cycle_count
-    output logic [31:0] arith_count, // Out arith_count
-	 output logic [31:0] mem_access_count,  // Out mem_access_Count
-	 output logic [31:0] mem_read_count, mem_write_count,
-	 output logic [31:0] ADD_count, SUB_count, ADDI_count, ADD_FP_count, MUL_FP_count, VADD_FP_count, VMUL_FP_count,
-			VSUM_FP_count, VSET_FP_count, SW_count, LW_count, SW_FP_count, LW_FP_count, VST_count, VLD_count,
-			BEQ_count, BLT_count, J_count
+	 output logic [255:0] stall_count_out, 
+    output logic [255:0] cycles_per_instruction_q78_out, // Out instr_cycle_count
+    output logic [255:0] arith_count_out, // Out arith_count
+	 output logic [255:0] mem_access_count_out  // Out mem_access_Count
+
 );
 	
 	logic arith_enable; //Habilitar contadores de aritmetica y memoria 
-	//logic [31:0] CPI_numerator, CPI_denominator;
-	
-	
+	logic [31:0] CPI_numerator, CPI_denominator;
+	logic [31:0] mem_read_count, mem_write_count;
+	logic [31:0] ADD_count, SUB_count, ADDI_count, ADD_FP_count, MUL_FP_count, VADD_FP_count, VMUL_FP_count,
+			VSUM_FP_count, VSET_FP_count, SW_count, LW_count, SW_FP_count, LW_FP_count, VST_count, VLD_count,
+			BEQ_count, BLT_count, J_count;
+			
+	logic [31:0] stall_count, arith_count, mem_access_count;
+	logic [15:0] cycles_per_instruction_q78;
 	
 	parameter ARITH_INSTRUCTION_CYCLES = 5; 
 	parameter MEM_LD_INSTRUCTION_CYCLES = 5;   
@@ -72,7 +74,14 @@ module PMC_unit (
 		LW_count + LW_FP_count + VLD_count + SW_count + SW_FP_count + VST_count +
 		BEQ_count + BLT_count + J_count);
 		
-	divider division (CPI_numerator, CPI_denominator, cycles_per_instruction);
+	divider division (CPI_numerator, CPI_denominator, cycles_per_instruction_q78);
+	
+	
+	//Aumentar buses a tamano de vector
+	assign stall_count_out = {224'b0, stall_count};
+   assign cycles_per_instruction_q78_out = {240'b0, cycles_per_instruction_q78}; // Out instr_cycle_count
+   assign arith_count_out = {224'b0, arith_count};// Out arith_count
+	assign mem_access_count_out = {224'b0, mem_access_count};// Out mem_access_Count
     
 
 	 
