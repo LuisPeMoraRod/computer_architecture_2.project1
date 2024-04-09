@@ -3,7 +3,7 @@
 module datapath
 (
 	input logic clk, reset,
-	input logic memtoregE, memdataM, memsrcM, memtoregM, memtoregW, memwriteM,
+	input logic memtoregE, memdataM, memSrcM, memtoRegM, memtoRegW, memWriteM,
 	input logic pcsrcD, 
 	input logic [1:0] branchD,
 	input logic alusrcE, regdstE, scalarE,
@@ -17,7 +17,7 @@ module datapath
 	output logic flushE,
 	output logic [31:0] srca2D, srcb2D,
 	
-	output logic [31:0] address_RAM,
+	output logic [13:0] address_RAM,
 	output logic [31:0] byteena_RAM,
 	input logic [255:0] readData_RAM,
 	output logic [255:0] writeData_RAM,
@@ -46,7 +46,6 @@ module datapath
 	logic [1:0] VforwardaE, VforwardbE;
 	logic [63:0] Vflags;
 	
-	logic memtoRegM, memWriteM, memSrcM;
 	logic [255:0] Vmemout;
 	logic [255:0] ValuoutM;
 	logic [15:0] readdataM;
@@ -134,7 +133,7 @@ module datapath
 	reg_ren #(256) r4M(clk, reset, ~stallM, ValuoutE, ValuoutM);
 	
 	mux2 #(16) memDatamux (writedataM[15:0], ValuoutM[15:0], memdataM, scalarDataIn);
-	mux2 #(256) memSrcmux (extVector, Vmemout, memsrcM, VreadDataM);
+	mux2 #(256) memSrcmux (extVector, Vmemout, memSrcM, VreadDataM);
 
 	assign extVector = { 240'd0, readdataM };
 

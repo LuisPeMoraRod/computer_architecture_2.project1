@@ -10,7 +10,7 @@ module top
 	logic memwrite;
 	logic [31:0] pcF, instr;
 	
-	logic [31:0] address_RAM;
+	logic [13:0] address_RAM;
 	logic [31:0] byteena_RAM;
 	logic [255:0] readData_RAM;
 	logic [255:0] writeData_RAM;

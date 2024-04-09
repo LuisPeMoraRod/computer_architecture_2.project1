@@ -149,12 +149,9 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
         rt = get_register(instruction[2])
         imm = branch_imm(i, instruction[3], labels)
 
-    if (mnemonic == SW or mnemonic == LW):
-        rt = get_register(instruction[1])
-        rs = get_register(instruction[2])
-        imm = '0' * IMM_SIZE
-
-    if (mnemonic == SWFP or mnemonic == LWFP):
+    if (mnemonic == SW or mnemonic == LW or \
+        mnemonic == SWFP or mnemonic == LWFP or \
+        mnemonic == VST or mnemonic == VLD):
         rt = get_register(instruction[1])
         rs = get_register(instruction[2])
         imm = '0' * IMM_SIZE
