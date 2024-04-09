@@ -1,65 +1,63 @@
-`timescale 1ns / 1ps
+`timescale 1 ps / 1 ps
+module dmem_tb();
+	
+	
+	logic clk, reset;
+	logic	[13:0]  address;
+	logic	[31:0]  byteena;
+	logic	[255:0]  data;
+	logic	rden, wren;
+	logic	[255:0]  q;
+	
+	
+	// instantiate device to be tested
+	dmem data_mem
+	(
+		address,
+		byteena,
+		clk,
+		data,
+		rden,
+		wren,
+		q
+	);
 
-module dmem_tb;
-
-    // Testbench signals
-    reg clk;
-    reg w_enable;
-    reg src_sel;
-    reg [31:0] addr;
-    reg [15:0] w_data_a;
-    reg [255:0] w_data_b;
-    wire [15:0] q_a;
-    wire [255:0] q_b;
-
-    dmem dut (
-        .clk(clk),
-        .w_enable(w_enable),
-        .src_sel(src_sel),
-        .addr(addr),
-        .w_data_a(w_data_a),
-        .w_data_b(w_data_b),
-        .q_a(q_a),
-        .q_b(q_b)
-    );
-
-    // Clock generation
+	
+	// Clock generation
     initial begin
         clk = 0;
-        forever #5 clk = !clk; // 100MHz clock
+        forever #10 clk = !clk; // 50MHz clock
     end
-
-    // Test sequence
-    initial begin
-        // Initialize inputs
-        w_enable = 0;
-        src_sel = 0;
-        addr = 0;
-        w_data_a = 0;
-        w_data_b = 0;
-
-        // Reset sequence
-        #100;
-        
-        // Example write operation
-        w_enable = 1;
-        src_sel = 0; // Writing scalar value
-        addr = 32'h00000010; // Example address
-        w_data_a = 16'hFFFF; // Example data
-        #10;
-        
-        // Switch to vectorial write
-        src_sel = 1;
-        addr = 32'h00000020;
-        w_data_b = 256'hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA; // Example data
-        #10;
-
-        w_enable = 0;
-        #10;
-        addr = 32'h00000010;
-        src_sel = 0;
-        // End simulation
-        #100;
-        $finish;
-    end
+	
+	// initialize test
+	initial
+	begin
+		reset <= 1; 
+		
+		byteena <= 32'd35;
+		data <= 256'd0;
+		rden <= 1'd0;
+		wren <= 1'd0;
+		address <= 14'd0;
+		
+		# 22; 
+		
+		reset <= 0;
+		
+		wait (~clk);
+		wait (clk);
+		
+		data <= 256'h0180_0140_0380_0180_0080_0300_0140_0455_5611_0011_0100_DDDD_AAAA_FFFF_FFFF_FFFF;
+		wren <= 1'd1;
+		
+		wait (~clk);
+		wait (clk);
+		byteena <= 32'd1;
+		address <= 14'd0;
+		data <= 256'h0180_0140_0380_0180_0080_0300_0140_0455_5611_0011_0100_DDDD_AAAA_2222_2222_2222;
+		wren <= 1'd1;
+		
+		
+	end
+	
 endmodule
