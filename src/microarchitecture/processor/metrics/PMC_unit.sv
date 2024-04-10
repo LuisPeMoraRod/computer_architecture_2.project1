@@ -3,7 +3,7 @@ module PMC_unit (
     input logic reset,   // Señal de reset
     input logic memWrite_in, memToReg_in, //Senales de control de mem y WB
 	 input logic [2:0] aluControl_in,
-    input logic [1:0 ]stall_in, //Habilitar contador de stalls
+    input logic [3:0 ]stall_in, //Habilitar contador de stalls
 	 input logic [5:0] opcode_in, funct_in, // señales desde al menos execute en adelante
 	 input logic jmp_in, // señal desde unidad de control
 	 input logic [1:0] branch_in, // señal desde unidad de control
@@ -47,7 +47,7 @@ module PMC_unit (
 		
 
    // Contador de Stalls:
-   counter stall_counter (clk, reset, (stall_in[0] || stall_in[1]), stall_count);
+   counter stall_counter (clk, reset, (stall_in[0] || stall_in[1] || stall_in[2] || stall_in[3]), stall_count);
 	//======================================================================
 	 
 	//Contador de Operaciones Aritmeticas

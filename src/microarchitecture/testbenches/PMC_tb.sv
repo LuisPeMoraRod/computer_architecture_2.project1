@@ -4,7 +4,7 @@ module PMC_tb();
     logic reset;   // Señal de reset
     logic memWrite_in, memToReg_in; //Senales de control
 	 logic [2:0] aluControl_in;
-    logic [1:0]stall_enable; //Habilitar contador de stalls
+    logic [3:0]stall_enable; //Habilitar contador de stalls
 	 logic [5:0] opcode_in, funct_in; // señales desde al menos execute en adelante
 	 logic jmp_in; // señal desde unidad de control
 	 logic [1:0] branch_in; // señal desde unidad de control
@@ -99,8 +99,8 @@ module PMC_tb();
 			#10
 			//VADD.FP
 			memWrite_in<=0; 
+			stall_enable <= 4'b0010;
 			memToReg_in<=0;
-			stall_enable<=0;
 			aluControl_in <=3'b010;
 			opcode_in<=6'b001100;
 			funct_in<=6'b100100; 
@@ -109,8 +109,8 @@ module PMC_tb();
 			#10
 			//VMUL.FP
 			memWrite_in<=0; 
+			stall_enable <= 4'b0100;
 			memToReg_in<=0;
-			stall_enable<=0;
 			aluControl_in <=3'b000;
 			opcode_in<=6'b001100;
 			funct_in<=6'b100110; 
@@ -118,9 +118,9 @@ module PMC_tb();
 			branch_in<=2'b00;
 			#10
 			//vSUM.FP
+			stall_enable <= 4'b1000;
 			memWrite_in<=0; 
 			memToReg_in<=0;
-			stall_enable<=0;
 			aluControl_in <=3'b011;
 			opcode_in<=6'b001100;
 			funct_in<=6'b110000; 
