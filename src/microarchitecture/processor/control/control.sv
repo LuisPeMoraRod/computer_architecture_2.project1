@@ -3,7 +3,8 @@
 module control
 (
 	input logic clk, reset,
-	input logic [5:0] opD, functD, opM, functM,
+	input logic [5:0] opD, functD, 
+	output logic [5:0] opM, functM,
 	input logic [31:0] srca2D, srcb2D,
 	input logic flushE,
 
@@ -42,7 +43,7 @@ module control
 		pmc_en
 	);
 	
-	aludec ad(functD, aluopD, alucontrolD);
+	aludec ad(opD, functD, aluopD, alucontrolD);
 	
 	branch_control _bc (srca2D, srcb2D, branchD, pcsrcD);
 	
