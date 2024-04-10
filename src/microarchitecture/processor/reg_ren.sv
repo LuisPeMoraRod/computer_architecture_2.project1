@@ -10,5 +10,6 @@ module reg_ren #(parameter N = 32)
 	always_ff @(posedge clk, posedge reset)
 		if (reset) q <= 0;
 		else if (en) q <= d;
+		else q <= q;
 		
 endmodule

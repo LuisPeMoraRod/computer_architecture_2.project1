@@ -27,6 +27,8 @@ module simd_processor
 	logic [1:0] branchD;
 	logic [31:0] srca2D, srcb2D;
 	logic memwriteE, memwriteM, memsrcM;
+
+	logic stallE, stallM;
 	
 	control c
 	(
@@ -40,7 +42,8 @@ module simd_processor
 		regdstE, 
 		memwriteE, memwriteM, memdataM, memsrcM,
 		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
-		memtoregE, memtoregM, memtoregW
+		memtoregE, memtoregM, memtoregW,
+		stallE, stallM
 	);
 	
 	datapath dp
@@ -59,7 +62,9 @@ module simd_processor
 		byteena_RAM,
 		readData_RAM,
 		writeData_RAM,
-		rden_RAM, wren_RAM
+		rden_RAM, wren_RAM,
+
+		stallE, stallM
 	);
 
 endmodule

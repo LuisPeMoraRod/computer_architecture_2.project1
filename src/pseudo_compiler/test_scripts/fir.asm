@@ -1,5 +1,7 @@
     addi $t0, $zero, 4
     add $t1, $zero, $zero
+    lw $t2, $zero, 0
+    vld_fp $v0, $t2, 0
 loop:
     beq $t0, $t1, eof
 

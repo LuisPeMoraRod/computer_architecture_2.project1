@@ -21,13 +21,15 @@ module datapath
 	output logic [31:0] byteena_RAM,
 	input logic [255:0] readData_RAM,
 	output logic [255:0] writeData_RAM,
-	output logic rden_RAM, wren_RAM
+	output logic rden_RAM, wren_RAM,
+
+	output logic stallE, stallM
 );
 
 
 	logic forwardaD, forwardbD;
 	logic [1:0] forwardaE, forwardbE;
-	logic stallF, stallD, stallE, stallM;
+	logic stallF, stallD;
 	logic [4:0] rsD, rtD, rdD, rsE, rtE, rdE;
 	logic [4:0] writeregE, writeregM, writeregW;
 	logic flushD;
@@ -48,7 +50,7 @@ module datapath
 	
 	logic [255:0] Vmemout;
 	logic [255:0] ValuoutM;
-	logic [15:0] readdataM;
+	logic [31:0] readdataM;
 	logic [31:0] writedataM;
 	logic busy;
 
@@ -136,7 +138,7 @@ module datapath
 	mux2 #(16) memDatamux (writedataM[15:0], ValuoutM[15:0], memdataM, scalarDataIn);
 	mux2 #(256) memSrcmux (extVector, Vmemout, memSrcM, VreadDataM);
 
-	assign extVector = { 240'd0, readdataM };
+	assign extVector = { 240'd0, readdataM[15:0] };
 
 	vector_load_store_unit vlsu
     (
