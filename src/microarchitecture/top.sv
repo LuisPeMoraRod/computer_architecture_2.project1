@@ -31,8 +31,9 @@ module top
 	(
 		clk_c, 
 		clk_b, 
-		debug, 
-		clk
+		debug,
+		clk,
+		pcF
 	);
 	
 	muxout mux_out 
