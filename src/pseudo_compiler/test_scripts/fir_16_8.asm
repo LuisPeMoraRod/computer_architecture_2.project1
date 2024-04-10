@@ -1,21 +1,17 @@
     addi $t0, $zero, 4
     
     lw $t2, $t0, 0
-    add $zero, $zero, $zero
     
     addi $t1, $zero, 32
 
     lw $t3, $zero, 0
-    add $zero, $zero, $zero
 
     vld_fp $v0, $t3, 0
-    add $zero, $zero, $zero
 
 loop:
     beq $t2, $t1, eof
 
     vld_fp $v1, $t1, 0
-    add $zero, $zero, $zero
 
     vmul_fp $v2, $v0, $v1
     vsum_fp $v3, $v2
