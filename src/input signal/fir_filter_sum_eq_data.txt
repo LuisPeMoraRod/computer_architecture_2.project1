@@ -1,0 +1,4 @@
+*** FIR FILTER RESULTS ***
+
+Q7.8 Data
+0.07019236
