@@ -142,9 +142,9 @@ def fir_filter(x, coefficients):
 # sum equation
 def fir_filter_sum_eq(x, coefficients):
     y = []
-    print(x[0:16])
-    print(coefficients)
-    for i in range(1):#len(x)):
+    size = len(x)
+    x = np.append(x, [0] * 16)
+    for i in range(size):
         y.append(0)
         for j in range(len(coefficients)):
             if i + j < len(x):
@@ -198,7 +198,7 @@ def create_mif_file(depth, width, sine_q78_Hex, coefficients_q78_Hex):
         pos = 0
         hex_values_concatenated = "" 
 
-        mif_file.write(f"\t{pos} : {'0'*48 + '0005FB400005FB60'};\n")  
+        mif_file.write(f"\t{pos} : {'0'*48 + '0005FB600005FB80'};\n")  
         pos += 1
 
         # Write the signal data in hexadecimal format
