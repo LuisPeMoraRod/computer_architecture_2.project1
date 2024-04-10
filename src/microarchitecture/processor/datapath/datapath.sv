@@ -23,7 +23,7 @@ module datapath
 	output logic [255:0] writeData_RAM,
 	output logic rden_RAM, wren_RAM,
 
-	output logic stallF, stallD, stallE, stallM,
+	output logic stallF, stallD, stallE, stallM, stallW,
 
 	input logic [255:0] stall_count_out, 
 	input logic [255:0] cycles_per_instruction_q78_out,
@@ -68,7 +68,7 @@ module datapath
 		branchD,
 		forwardaD, forwardbD, 
 		forwardaE, forwardbE, VforwardaE, VforwardbE,
-		stallF, stallD, stallE, stallM, flushE
+		stallF, stallD, stallE, stallM, stallW, flushE
 	);
 	
 	// next PC logic
@@ -176,11 +176,11 @@ module datapath
 
 	
 	// Writeback stage
-	reg_r #(32) r1W (clk, reset, aluoutM, aluoutW);
-	reg_r #(32) r2W (clk, reset, readdataM, readdataW);
-	reg_r #(5) r3W (clk, reset, writeregM, writeregW);
-	reg_r #(256) r4W (clk, reset, ValuoutM, ValuoutW);
-	reg_r #(256) r5W (clk, reset, VreadDataM, VreadDataW);
+	reg_ren #(32) r1W (clk, reset, ~stallW, aluoutM, aluoutW);
+	reg_ren #(32) r2W (clk, reset, ~stallW, readdataM, readdataW);
+	reg_ren #(5) r3W (clk, reset, ~stallW, writeregM, writeregW);
+	reg_ren #(256) r4W (clk, reset, ~stallW, ValuoutM, ValuoutW);
+	reg_ren #(256) r5W (clk, reset, ~stallW, VreadDataM, VreadDataW);
 	
 	mux2 #(32) resmux (aluoutW, readdataW, memtoRegW, resultW);
 	mux2 #(256) regWmux (ValuoutW, VreadDataW, memtoRegW, VresultW);

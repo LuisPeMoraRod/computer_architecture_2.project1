@@ -28,7 +28,7 @@ module simd_processor
 	logic [31:0] srca2D, srcb2D;
 	logic memwriteE, memwriteM, memsrcM;
 
-	logic stallF, stallD, stallE, stallM;
+	logic stallF, stallD, stallE, stallM, stallW;
 	
 	logic [255:0] stall_count_out;
 	logic [255:0] cycles_per_instruction_q78_out;
@@ -50,7 +50,7 @@ module simd_processor
 		memwriteE, memwriteM, memdataM, memsrcM,
 		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 		memtoregE, memtoregM, memtoregW,
-		stallE, stallM,
+		stallE, stallM, stallW,
 		pmc_en
 	);
 	
@@ -72,7 +72,7 @@ module simd_processor
 		writeData_RAM,
 		rden_RAM, wren_RAM,
 
-		stallF, stallD, stallE, stallM,
+		stallF, stallD, stallE, stallM, stallW,
 
 		stall_count_out, 
 		cycles_per_instruction_q78_out,

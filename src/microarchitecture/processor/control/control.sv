@@ -16,7 +16,7 @@ module control
 	output logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 	output logic memtoregE, memtoregM, memtoregW,
 
-	input logic stallE, stallM,
+	input logic stallE, stallM, stallW,
 
 	output logic pmc_en
 );
@@ -60,7 +60,7 @@ module control
 		{memtoregE, memwriteE, memdataE, memsrcE, regwriteE, VregwriteE, opE, functE}, 
 		{memtoregM, memwriteM, memdataM, memsrcM, regwriteM, VregwriteM, opM, functM});
 	
-	reg_r #(3) regW (clk, reset, 
+	reg_ren #(3) regW (clk, reset, ~stallW,
 		{memtoregM, regwriteM, VregwriteM}, 
 		{memtoregW, regwriteW, VregwriteW});
 	
