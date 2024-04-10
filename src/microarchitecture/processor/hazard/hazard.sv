@@ -8,7 +8,7 @@ module hazard
 	input logic [1:0] branchD,
 	output logic forwardaD, forwardbD,
 	output logic [1:0] forwardaE, forwardbE, VforwardaE, VforwardbE,
-	output logic stallF, stallD, stallE, stallM, flushE
+	output logic stallF, stallD, stallE, stallM, stallW, flushE
 );
 
 
@@ -66,6 +66,7 @@ module hazard
 	assign stallD = lwstallD | branchstallD | busy;
 	assign stallE = busy;
 	assign stallM = busy;
-	assign flushE = stallD;
+	assign stallW = busy;
+	assign flushE = stallD & ~busy;
 	
 endmodule

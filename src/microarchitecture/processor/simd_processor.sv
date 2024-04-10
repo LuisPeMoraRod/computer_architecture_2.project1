@@ -16,7 +16,7 @@ module simd_processor
 	output logic rden_RAM, wren_RAM
 );
 
-	logic [5:0] opD, functD;
+	logic [5:0] opD, functD, opM, functM;
 	logic regdstE, alusrcE, scalarE,
 			pcsrcD, memdataM,
 			memtoregE, memtoregM, memtoregW,
@@ -28,11 +28,18 @@ module simd_processor
 	logic [31:0] srca2D, srcb2D;
 	logic memwriteE, memwriteM, memsrcM;
 
-	logic stallE, stallM;
+	logic stallF, stallD, stallE, stallM, stallW;
+	
+	logic [255:0] stall_count_out;
+	logic [255:0] cycles_per_instruction_q78_out;
+	logic [255:0] arith_count_out;
+	logic [255:0] mem_access_count_out;
+
+	logic pmc_en;
 	
 	control c
 	(
-		clk, reset, opD, functD, 
+		clk, reset, opD, functD, opM, functM,
 		srca2D, srcb2D,
 		flushE,
 		jumpD,
@@ -43,7 +50,8 @@ module simd_processor
 		memwriteE, memwriteM, memdataM, memsrcM,
 		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 		memtoregE, memtoregM, memtoregW,
-		stallE, stallM
+		stallE, stallM, stallW,
+		pmc_en
 	);
 	
 	datapath dp
@@ -64,7 +72,29 @@ module simd_processor
 		writeData_RAM,
 		rden_RAM, wren_RAM,
 
-		stallE, stallM
+		stallF, stallD, stallE, stallM, stallW,
+
+		stall_count_out, 
+		cycles_per_instruction_q78_out,
+		arith_count_out,
+		mem_access_count_out
+	);
+
+	PMC_unit pcmu
+	(
+		clk,
+		reset,
+		pmc_en,
+		memwriteM, memtoregW,
+		alucontrolE,
+		{stallF, stallD, stallE, stallM},
+		opM, functM,
+		jumpD,
+		branchD, 
+		stall_count_out, 
+		cycles_per_instruction_q78_out,
+		arith_count_out,
+		mem_access_count_out
 	);
 
 endmodule
