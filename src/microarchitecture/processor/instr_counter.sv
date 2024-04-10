@@ -1,6 +1,7 @@
 module instr_counter(
     input logic clk,       // Señal de reloj
     input logic reset,     // Señal de reset
+	input logic global_en,
     input logic [5:0] opcode_in,
 	 input logic [5:0] funct_in,
 	 input logic jmp_in,
@@ -47,7 +48,7 @@ module instr_counter(
 			BLT_count <= 0;
 			J_count <= 0;
 			
-	  end else begin	
+	  end else if (global_en) begin	
 			
 			case(opcode_in) 
 				6'b000000 : begin //OPERACION ARITMETICA CON INTS
