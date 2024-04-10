@@ -1,7 +1,7 @@
 module PMC_unit (
     input logic clk,     // Señal de reloj
     input logic reset,   // Señal de reset
-	input logic pmc_en,  // Impulso para activar/desactivar el conteo
+	 input logic pmc_en,  // Impulso para activar/desactivar el conteo
     input logic memWrite_in, memToReg_in, //Senales de control de mem y WB
 	 input logic [2:0] aluControl_in,
     input logic [3:0 ]stall_in, //Habilitar contador de stalls
