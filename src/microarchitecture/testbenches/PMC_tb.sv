@@ -2,6 +2,7 @@
 module PMC_tb();
 	 logic clk;     // Señal de reloj
     logic reset;   // Señal de reset
+	 logic pmc_en;
     logic memWrite_in, memToReg_in; //Senales de control
 	 logic [2:0] aluControl_in;
     logic [3:0]stall_enable; //Habilitar contador de stalls
@@ -17,7 +18,7 @@ module PMC_tb();
 	 
 	// instantiate device to be tested
 	PMC_unit dut(
-	 clk, reset,
+	 clk, reset, pmc_en,
     memWrite_in, memToReg_in, 
 	 aluControl_in,
     stall_enable, //Habilitar contador de stalls
@@ -46,6 +47,9 @@ module PMC_tb();
 		# 10; 
 		reset <= 0;
 		#10
+		pmc_en <= 1;
+		#10
+		pmc_en <= 0;
 		for (int i = 0; i < 10; i++) begin
 			//ADD
 			memWrite_in<=0; 
