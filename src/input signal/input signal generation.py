@@ -57,7 +57,7 @@ sine_q78_Hex = convert_Q78_toHex(sine_wave)
 print_data(time, sine_wave, sine_q78, sine_q78_Hex)
 
 # Plot
-plot_signal(time, sine_wave)
+#plot_signal(time, sine_wave)
 
 
 
@@ -120,13 +120,19 @@ def create_mif_file(depth, width, sine_q78_Hex, coefficients_q78_Hex):
         pos = 0
         hex_values_concatenated = "" 
 
+        mif_file.write(f"\t{pos} : {'0'*48 + '0005FB400005FB60'};\n")  
+        pos += 1
+
         # Write the signal data in hexadecimal format
         for address, value_Q78_toHex in enumerate(sine_q78_Hex):
             hex_value = float_to_q78_hex(value_Q78_toHex)
             hex_values_concatenated += hex_value  
             
             if len(hex_values_concatenated) == 64:
-                mif_file.write(f"\t{pos} : {hex_values_concatenated};\n")
+                #mif_file.write(f"\t{pos} : {hex_values_concatenated};\n")
+                hex_chunks = [hex_values_concatenated[i:i+4] for i in range(0, len(hex_values_concatenated), 4)]
+                reversed_hex_values = ''.join(hex_chunks[::-1])
+                mif_file.write(f"\t{pos} : {reversed_hex_values};\n")
                 hex_values_concatenated = "" 
                 pos += 1
         
@@ -138,7 +144,10 @@ def create_mif_file(depth, width, sine_q78_Hex, coefficients_q78_Hex):
             hex_values_concatenated += hex_value  
 
             if len(hex_values_concatenated) == 64:
-                mif_file.write(f"\t{pos} : {hex_values_concatenated};\n")
+                #mif_file.write(f"\t{pos} : {hex_values_concatenated};\n")
+                hex_chunks = [hex_values_concatenated[i:i+4] for i in range(0, len(hex_values_concatenated), 4)]
+                reversed_hex_values = ''.join(hex_chunks[::-1])
+                mif_file.write(f"\t{pos} : {reversed_hex_values};\n")
                 hex_values_concatenated = "" 
                 pos += 1
 
@@ -157,6 +166,7 @@ width = 256
 
 create_mif_file(depth, width, sine_q78_Hex, coefficients_q78_Hex)
 
-# LINE 0 - 12249        : AUDIO FILE
-# LINE 12250 - 12251    : COEFFICIENTS
+# LINE 0                : RESERVED
+# LINE 1 - 12250        : AUDIO FILE
+# LINE 12251 - 12252    : COEFFICIENTS
 # LINE 12252 - 12287    : EMPY SPACE
