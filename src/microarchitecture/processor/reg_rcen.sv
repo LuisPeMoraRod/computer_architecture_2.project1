@@ -11,5 +11,6 @@ module reg_rcen #(parameter N = 32)
 		if (reset) q <= 0;
 		else if (clear) q <= 0;
 		else if (en) q <= d;
+		else q <= q;
 		
 endmodule

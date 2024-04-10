@@ -2,10 +2,15 @@
 module general_tb();
 	logic clk;
 	logic reset;
-	logic [31:0] readdata2;
 	
 	// instantiate device to be tested
-	top dut(clk, reset, readdata2);
+	top dut(clk, reset);
+
+	// Clock generation
+    initial begin
+        clk = 0;
+        forever #10 clk = !clk; // 50MHz clock
+    end
 	
 	// initialize test
 	initial
@@ -13,11 +18,6 @@ module general_tb();
 		reset <= 1; # 22; reset <= 0;
 	end
 	
-	// generate clock to sequence tests
-	always
-	begin
-		clk <= 1; # 5; clk <= 0; # 5;
-	end
 	
 	
 endmodule

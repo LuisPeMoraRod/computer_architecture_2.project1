@@ -3,23 +3,27 @@
 module datapath
 (
 	input logic clk, reset,
-	input logic memtoregE, memdataM, memsrcM, memtoregM, memtoregW,
+	input logic memtoregE, memdataM, memSrcM, memtoRegM, memtoRegW, memwriteE, memWriteM,
 	input logic pcsrcD, 
 	input logic [1:0] branchD,
 	input logic alusrcE, regdstE, scalarE,
-	input logic regwriteE, regwriteM, regwriteW, VregwriteW,
+	input logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
 	input logic jumpD,
 	input logic [2:0] alucontrolE,
 	output logic [31:0] pcF,
 	input logic [31:0] instrF,
-	output logic [31:0] aluoutM,
-	output logic [31:0] writedataM,
-	input logic [31:0] readdataM,
+	
 	output logic [5:0] opD, functD,
 	output logic flushE,
 	output logic [31:0] srca2D, srcb2D,
-	output logic [255:0] ValuoutM,
-	input logic [255:0] Vmemout
+	
+	output logic [13:0] address_RAM,
+	output logic [31:0] byteena_RAM,
+	input logic [255:0] readData_RAM,
+	output logic [255:0] writeData_RAM,
+	output logic rden_RAM, wren_RAM,
+
+	output logic stallE, stallM
 );
 
 
@@ -33,27 +37,34 @@ module datapath
 	logic [31:0] signimmD, signimmE, signimmshD;
 	logic [31:0] srcaD, srcaE, srca2E;
 	logic [31:0] srcbD, srcbE, srcb2E, srcb3E;
-	logic [15:0] srcmem;
+	logic [15:0] scalarDataIn;
 	logic [31:0] pcplus4D, instrD;
-	logic [31:0] aluoutE, aluoutW;
+	logic [31:0] aluoutE, aluoutM, aluoutW;
 	logic [31:0] readdataW, resultW;
 	logic [3:0] flags;
 	logic [255:0] VsrcaD, VsrcaE, Vsrca2E;
 	logic [255:0] VsrcbD, VsrcbE, Vsrcb2E;
-	logic [255:0] VresultW, ValuoutE, extVector, ValuoutW, VreadDataM, VreadDataW;
+	logic [255:0] VresultE, VresultW, ValuoutE, extVector, ValuoutW, VreadDataM, VreadDataW;
 	logic [1:0] VforwardaE, VforwardbE;
 	logic [63:0] Vflags;
 	
-	
+	logic [255:0] Vmemout;
+	logic [255:0] ValuoutM;
+	logic [31:0] readdataM;
+	logic [31:0] writedataM;
+	logic busy;
+
 	// hazard detection
 	hazard h
 	(
-		rsD, rtD, rsE, rtE, writeregE, writeregM,
-		writeregW,regwriteE, regwriteM, regwriteW,
-		memtoregE, memtoregM, branchD,
-		forwardaD, forwardbD, forwardaE,
-		forwardbE,
-		stallF, stallD, flushE
+		rsD, rtD, rsE, rtE, 
+		writeregE, writeregM, writeregW,
+		regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+		memtoregE, memtoRegM, busy,
+		branchD,
+		forwardaD, forwardbD, 
+		forwardaE, forwardbE, VforwardaE, VforwardbE,
+		stallF, stallD, stallE, stallM, flushE
 	);
 	
 	// next PC logic
@@ -65,7 +76,7 @@ module datapath
 	regfile rf(clk, reset, regwriteW, rsD, rtD, writeregW, resultW, srcaD, srcbD);
 	
 	// Vector register file 
-	regfile_vec rf_v(clk, VregwriteW, rsD[2:0], rtD[2:0], writeregW[2:0], VresultW, VsrcaD, VsrcbD);
+	regfile_vec rf_v(clk, reset, VregwriteW, rsD, rtD, writeregW, VresultW, VsrcaD, VsrcbD);
 	
 	
 	// Fetch stage
@@ -93,14 +104,14 @@ module datapath
 	
 	
 	// Execute stage
-	reg_rc #(32) r1E (clk, reset, flushE, srcaD, srcaE);
-	reg_rc #(32) r2E (clk, reset, flushE, srcbD, srcbE);
-	reg_rc #(32) r3E (clk, reset, flushE, signimmD, signimmE);
-	reg_rc #(5) r4E (clk, reset, flushE, rsD, rsE);
-	reg_rc #(5) r5E (clk, reset, flushE, rtD, rtE);
-	reg_rc #(5) r6E (clk, reset, flushE, rdD, rdE);
-	reg_rc #(256) r7E (clk, reset, flushE, VsrcaD, VsrcaE);
-	reg_rc #(256) r8E (clk, reset, flushE, VsrcbD, VsrcbE);
+	reg_rcen #(32) r1E (clk, reset, ~stallE, flushE, srcaD, srcaE);
+	reg_rcen #(32) r2E (clk, reset, ~stallE, flushE, srcbD, srcbE);
+	reg_rcen #(32) r3E (clk, reset, ~stallE, flushE, signimmD, signimmE);
+	reg_rcen #(5) r4E (clk, reset, ~stallE, flushE, rsD, rsE);
+	reg_rcen #(5) r5E (clk, reset, ~stallE, flushE, rtD, rtE);
+	reg_rcen #(5) r6E (clk, reset, ~stallE, flushE, rdD, rdE);
+	reg_rcen #(256) r7E (clk, reset, ~stallE, flushE, VsrcaD, VsrcaE);
+	reg_rcen #(256) r8E (clk, reset, ~stallE, flushE, VsrcbD, VsrcbE);
 	
 	
 	mux3 #(32) forwardaemux (srcaE, resultW, aluoutM, forwardaE, srca2E);
@@ -113,27 +124,49 @@ module datapath
 	
 	mux3 #(256) Vforwardaemux (VsrcaE, VresultW, ValuoutM, VforwardaE, Vsrca2E);
 	mux3 #(256) Vforwardbemux (VsrcbE, VresultW, ValuoutM, VforwardbE, Vsrcb2E);
-	
-	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, alucontrolE, scalarE, ValuoutE, Vflags);
-	
+
+	ALU_vec alu_vec(Vsrca2E, Vsrcb2E, srcb3E, alucontrolE, scalarE, VresultE, Vflags);
+
+	mux2 #(256) SWmux ( VresultE, Vsrcb2E, memwriteE, ValuoutE);
 	
 	// Memory stage
-	reg_r #(32) r1M(clk, reset, srcb2E, writedataM);
-	reg_r #(32) r2M(clk, reset, aluoutE, aluoutM);
-	reg_r #(5) r3M(clk, reset, writeregE, writeregM);
-	reg_r #(256) r4M(clk, reset, ValuoutE, ValuoutM);
+	reg_ren #(32) r1M(clk, reset, ~stallM, srcb2E, writedataM);
+	reg_ren #(32) r2M(clk, reset, ~stallM, aluoutE, aluoutM);
+	reg_ren #(5) r3M(clk, reset, ~stallM, writeregE, writeregM);
+	reg_ren #(256) r4M(clk, reset, ~stallM, ValuoutE, ValuoutM);
 	
-	mux2 #(16) memDatamux (writedataM[15:0], ValuoutM[15:0], memdataM, srcmem);
-	mux2 #(256) memSrcmux (extVector, Vmemout, memsrcM, VreadDataM);
+	mux2 #(16) memDatamux (writedataM[15:0], ValuoutM[15:0], memdataM, scalarDataIn);
+	mux2 #(256) memSrcmux (extVector, Vmemout, memSrcM, VreadDataM);
+
+	assign extVector = { 240'd0, readdataM[15:0] };
+
+	vector_load_store_unit vlsu
+    (
+        clk, reset,
+        memtoRegM, memWriteM, memSrcM,
+        aluoutM,
+        scalarDataIn, 
+        ValuoutM,
+        busy,
+        readdataM,
+        Vmemout,
+    
+        readData_RAM,
+        rden_RAM, wren_RAM,
+        address_RAM,
+        byteena_RAM,
+        writeData_RAM
+    );
+
 	
 	// Writeback stage
 	reg_r #(32) r1W (clk, reset, aluoutM, aluoutW);
-	reg_r #(32) r2W (clk, reset, readdataM, readdataW);
+	reg_r #(32) r2W (clk, reset, { 16'd0, readdataM }, readdataW);
 	reg_r #(5) r3W (clk, reset, writeregM, writeregW);
 	reg_r #(256) r4W (clk, reset, ValuoutM, ValuoutW);
 	reg_r #(256) r5W (clk, reset, VreadDataM, VreadDataW);
 	
-	mux2 #(32) resmux (aluoutW, readdataW, memtoregW, resultW);
-	mux2 #(256) regWmux (ValuoutW, VreadDataW, memtoregW, VresultW);
+	mux2 #(32) resmux (aluoutW, readdataW, memtoRegW, resultW);
+	mux2 #(256) regWmux (ValuoutW, VreadDataW, memtoRegW, VresultW);
 	
 endmodule

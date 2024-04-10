@@ -12,9 +12,11 @@ module control
 	output logic pcsrcD, alusrcE, scalarE,
 	output logic [2:0] alucontrolE,
 	output logic regdstE,
-	output logic memwriteM, memdataM, memsrcM,
-	output logic regwriteE, regwriteM, regwriteW, VregwriteW,
-	output logic memtoregE, memtoregM, memtoregW
+	output logic memwriteE, memwriteM, memdataM, memsrcM,
+	output logic regwriteE, regwriteM, VregwriteM, regwriteW, VregwriteW,
+	output logic memtoregE, memtoregM, memtoregW,
+
+	input logic stallE, stallM
 );
 
 
@@ -22,8 +24,8 @@ module control
 	logic memtoregD, memwriteD, alusrcD, scalarD, 
 			regdstD, regwriteD, VregwriteD, memdataD;
 	logic [2:0] alucontrolD;
-	logic memwriteE, memdataE, memsrcD, memsrcE;
-	logic VregwriteE, VmemtoregM, VregwriteM;
+	logic memdataE, memsrcD, memsrcE;
+	logic VregwriteE, VmemtoregM;
 	
 	
 	maindec md
@@ -44,15 +46,17 @@ module control
 	
 	
 	// pipeline registers
-	reg_rc #(12) regE
+	reg_rcen #(12) regE
 	(
-		clk, reset, flushE,
+		clk, reset, ~stallE, flushE,
 		{memtoregD, memwriteD, memdataD, memsrcD, alusrcD, scalarD, regdstD, regwriteD, VregwriteD, alucontrolD},
 		{memtoregE, memwriteE, memdataE, memsrcE, alusrcE, scalarE, regdstE, regwriteE, VregwriteE, alucontrolE}
 	);
-	reg_r #(6) regM (clk, reset, 
+
+	reg_ren #(6) regM (clk, reset, ~stallM,
 		{memtoregE, memwriteE, memdataE, memsrcE, regwriteE, VregwriteE}, 
 		{memtoregM, memwriteM, memdataM, memsrcM, regwriteM, VregwriteM});
+	
 	reg_r #(3) regW (clk, reset, 
 		{memtoregM, regwriteM, VregwriteM}, 
 		{memtoregW, regwriteW, VregwriteW});
