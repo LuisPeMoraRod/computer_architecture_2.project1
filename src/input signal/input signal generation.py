@@ -142,8 +142,9 @@ def fir_filter(x, coefficients):
 # sum equation
 def fir_filter_sum_eq(x, coefficients):
     y = []
-
-    for i in range(len(x)):
+    print(x[0:16])
+    print(coefficients)
+    for i in range(1):#len(x)):
         y.append(0)
         for j in range(len(coefficients)):
             if i + j < len(x):
@@ -164,11 +165,11 @@ def write_filter_results_to_file(signal_q78, file_name):
     
     print("The fir_filter_results file was created successfully.\n")
 
-x = sine_q78
+x = sine_wave
 bk = coefficients_q78
 
 y = fir_filter(x, bk)
-y2 = fir_filter_sum_eq(x, bk)
+y2 = fir_filter_sum_eq(x, bk[0:16])
 
 # Write the results to the file
 write_filter_results_to_file(y, "fir_filter_data.txt")
